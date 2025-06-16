@@ -3,16 +3,14 @@ require("dotenv").config(); // load env file
 const connectToDB = require("./database/db");
 const app = express();
 const port = process.env.PORT;
-connectToDB();
+
+const featureRoutes = require("./routes/feature-route");
 
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    data: books,
-    message: "done",
-  });
-});
+app.use("/feature", featureRoutes);
+
+connectToDB();
 
 app.listen(port, () => {
   console.log(`Server is now running on port ${port}`);
