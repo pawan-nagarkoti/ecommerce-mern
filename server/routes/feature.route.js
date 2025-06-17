@@ -2,7 +2,7 @@ const express = require("express");
 const {
   addNewFeatureImage,
   fetchFeaturedImages,
-} = require("../controller/feature-controller");
+} = require("../controller/feature.controller");
 const upload = require("../middlewares/multer.middleware");
 
 const router = express.Router();
