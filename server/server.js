@@ -4,9 +4,12 @@ const connectToDB = require("./database/db");
 const app = express();
 const port = process.env.PORT;
 
-const featureRoutes = require("./routes/feature-route");
+// Middleware
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(express.static("public"));
 
-app.use(express.json());
+const featureRoutes = require("./routes/feature-route");
 
 app.use("/feature", featureRoutes);
 
