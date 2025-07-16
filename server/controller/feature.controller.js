@@ -75,6 +75,26 @@ const deleteFeaturedImage = async (req, res) => {
 // update
 const updateFeatureImage = async (req, res) => {
   try {
+    const updateID = req.query.id;
+    const file = req?.file?.path;
+
+    if (!file) {
+      return res.status(400).json({
+        message: "Image is missing",
+      });
+    }
+
+    const featureImage = await uploadOnCloudinary(file); // create image url
+    const updatedImage = await Feature.findByIdAndUpdate(
+      updateID,
+      { image: featureImage.url },
+      { new: true } // Return the updated document
+    );
+    res.status(200).json({
+      success: true,
+      data: updatedImage,
+      message: "Feature image updated successfully",
+    });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({
