@@ -19,7 +19,7 @@ const addNewFeatureImage = async (req, res) => {
 // fetch all featured images
 const fetchFeaturedImages = async (req, res) => {
   try {
-    const fetchImages = await Feature.find({});
+    const fetchImages = await Feature.find({}).sort({ createdAt: -1 });
     res.status(200).json({
       data: fetchImages,
       message: "Feature image fetch successfully",

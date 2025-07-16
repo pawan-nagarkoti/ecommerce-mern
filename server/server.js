@@ -10,8 +10,10 @@ app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
 
 const featureRoutes = require("./routes/feature.route");
+const productRoutes = require("./routes/product.route");
 
 app.use("/feature", featureRoutes);
+app.use("/product", productRoutes);
 
 connectToDB();
 
