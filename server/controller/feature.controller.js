@@ -46,8 +46,48 @@ const deleteAllFeaturedImage = async (req, res) => {
   }
 };
 
+// delete single fetured image
+const deleteFeaturedImage = async (req, res) => {
+  try {
+    const deletedID = req.query.id;
+    const deletedFeatureImageId = await Feature.findByIdAndDelete(deletedID);
+    if (deletedFeatureImageId) {
+      res.status(200).json({
+        success: true,
+        data: deletedFeatureImageId,
+        message: "Feature image deleted",
+      });
+    } else {
+      res.status(201).json({
+        data: deletedFeatureImageId,
+        message: "Not found",
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      success: false,
+      message: `{error message ->  ${error.message}}`,
+    });
+  }
+};
+
+// update
+const updateFeatureImage = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      success: false,
+      message: `{error message ->  ${error.message}}`,
+    });
+  }
+};
+
 module.exports = {
   addNewFeatureImage,
   fetchFeaturedImages,
   deleteAllFeaturedImage,
+  deleteFeaturedImage,
+  updateFeatureImage,
 };
