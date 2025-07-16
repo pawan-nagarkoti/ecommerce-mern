@@ -78,9 +78,43 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// update products
+const updateProducts = async (req, res) => {
+  try {
+    const up = req.body;
+    const upID = req.query.id;
+    const img = req.file.path;
+    const productImage = await uploadOnCloudinary(img);
+
+    const updatedProductObj = {
+      title: up.title,
+      description: up.description,
+      category: up.category,
+      brand: up.brand,
+      price: up.price,
+      salePrice: up.salePrice,
+      stock: up.stock,
+      image: productImage.url,
+    };
+    const updatedProduct = await Product.findByIdAndUpdate(
+      upID,
+      updatedProductObj,
+      { new: true }
+    );
+
+    res.status(200).json({
+      data: updatedProduct,
+      message: "Product updated",
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   fetchProducts,
   addProducts,
   deleteAllProducts,
   deleteProduct,
+  updateProducts,
 };
