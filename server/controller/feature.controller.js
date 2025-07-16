@@ -33,7 +33,21 @@ const fetchFeaturedImages = async (req, res) => {
   }
 };
 
+// delete all featured images
+const deleteAllFeaturedImage = async (req, res) => {
+  try {
+    const deleteAllFeatureImages = await Feature.deleteMany({});
+    res.status(200).json({
+      data: deleteAllFeatureImages,
+      message: "Delete all featured images",
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   addNewFeatureImage,
   fetchFeaturedImages,
+  deleteAllFeaturedImage,
 };
