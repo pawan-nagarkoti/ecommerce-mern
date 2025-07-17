@@ -3,8 +3,42 @@ const { uploadOnCloudinary } = require("../utils/cloudinary");
 
 // fetch all products
 const fetchProducts = async (req, res) => {
+  const category = req.query.category || [];
+  const brand = req.query.brand || [];
+  const sortBy = req.query.sortBy || "price-lowToHigh";
+
+  const filters = {};
+
+  if (category.length > 0) {
+    filters.category = { $in: category.split(",") };
+  }
+
+  if (brand.length > 0) {
+    filters.brand = { $in: brand.split(",") };
+  }
+
+  const sort = {};
+
+  switch (sortBy) {
+    case "price-lowToHigh":
+      sort.price = 1;
+      break;
+    case "price-highToLow":
+      sort.price = -1;
+      break;
+    case "title-aToz":
+      sort.title = 1;
+      break;
+    case "title-zToa":
+      sort.title = -1;
+      break;
+    default:
+      createdAt = -1;
+      break;
+  }
+
   try {
-    const products = await Product.find({}).sort({ createdAt: -1 });
+    const products = await Product.find(filters).sort(sort);
     res.status(200).json({
       success: true,
       data: products,
