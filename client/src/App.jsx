@@ -1,12 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { Route, Routes } from "react-router-dom";
+import Dashboard from "./page/admin/dashboard";
+import Order from "./page/admin/order";
+import Product from "./page/admin/product";
 
 export default function App() {
   return (
-    <>
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>;
-      <div className="flex min-h-svh flex-col items-center justify-center">
-        <Button>Click me</Button>
-      </div>
-    </>
+    <Routes>
+      <Route path="/admin" element={<Dashboard />}>
+        <Route path="product" element={<Product />} />
+        <Route path="order" element={<Order />} />
+      </Route>
+    </Routes>
   );
 }
