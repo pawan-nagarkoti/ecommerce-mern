@@ -3,11 +3,18 @@ import Dashboard from "./page/admin/dashboard";
 import Order from "./page/admin/order";
 import Product from "./page/admin/product";
 import AdminLayout from "./page/admin/adminLayout";
-import LoginPage from "./page/login";
+import LoginPage from "./page/auth/login";
+import ShopLayout from "./page/shop/shopLayout";
+import Listing from "./page/shop/listing";
+import Home from "./page/shop/home";
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/shop" element={<ShopLayout />}>
+        <Route path="home" element={<Home />} />
+        <Route path="listing" element={<Listing />} />
+      </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="product" element={<Product />} />
