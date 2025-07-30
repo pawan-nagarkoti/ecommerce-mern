@@ -31,8 +31,8 @@ export default function ProductList() {
           </div>
           <p className="mt-4">$1000</p>
         </CardContent>
-        <CardFooter className="mb-3">
-          <Button>Delete</Button>
+        <CardFooter className=" p-0">
+          <Button className="w-full">Add to cart</Button>
         </CardFooter>
       </Card>
     </>

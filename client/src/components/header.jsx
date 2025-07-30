@@ -29,9 +29,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 shadow-md bg-white w-full">
+    <nav className="flex items-center justify-between px-6 py-4 bg-black sticky top-0 w-full text-white z-50">
       {/* Left: Logo */}
-      <div className=" flex  gap-2 text-xl font-bold text-gray-800">
+      <div className=" flex  gap-2 text-xl font-bold">
         <HousePlug className="h-6 w-6" /> Ecommerce
       </div>
 
