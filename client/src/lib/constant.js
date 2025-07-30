@@ -1,3 +1,19 @@
+import {
+  Airplay,
+  BabyIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloudLightning,
+  Heater,
+  Images,
+  Shirt,
+  ShirtIcon,
+  ShoppingBasket,
+  UmbrellaIcon,
+  WashingMachine,
+  WatchIcon,
+} from "lucide-react";
+
 export const category = [
   { id: "men", label: "Men" },
   { id: "women", label: "Women" },
@@ -14,3 +30,26 @@ export const brand = [
   { id: "zara", label: "Zara" },
   { id: "h&m", label: "H&M" },
 ];
+
+export const shopByCategory = {
+  title: "Shop by category",
+  items: [
+    { label: "Men", icon: ShirtIcon },
+    { label: "Women", icon: CloudLightning },
+    { label: "Kids", icon: BabyIcon },
+    { label: "Accessories", icon: WatchIcon },
+    { label: "Footwear", icon: UmbrellaIcon },
+  ],
+};
+
+export const shopByBrand = {
+  title: "Shop by brand",
+  items: [
+    { label: "Nike", icon: Shirt },
+    { label: "Adidas", icon: WashingMachine },
+    { label: "Puma", icon: ShoppingBasket },
+    { label: "Levi's", icon: Airplay },
+    { label: "Zara", icon: Images },
+    { label: "H&M", icon: Heater },
+  ],
+};
