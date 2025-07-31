@@ -1,8 +1,18 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { _get } from "../../lib/api";
+import axios from "axios";
 
 export default function dashboard() {
+  const fetchFeaturedImage = async () => {
+    const response = await _get("feature/get");
+    console.log("response", response);
+  };
+  useEffect(() => {
+    fetchFeaturedImage();
+  }, []);
   return (
     <>
       <div className="grid w-full max-w-sm items-center gap-3">

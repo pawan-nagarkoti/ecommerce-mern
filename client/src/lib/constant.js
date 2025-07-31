@@ -14,6 +14,8 @@ import {
   WatchIcon,
 } from "lucide-react";
 
+export const apiUrl = import.meta.env.VITE_API_BASE_URL;
+
 export const category = [
   { id: "men", label: "Men" },
   { id: "women", label: "Women" },

@@ -2,7 +2,16 @@ const express = require("express");
 require("dotenv").config(); // load env file
 const connectToDB = require("./database/db");
 const app = express();
+const cors = require("cors");
 const port = process.env.PORT;
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    // allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // Middleware
 app.use(express.json({ limit: "16kb" }));
