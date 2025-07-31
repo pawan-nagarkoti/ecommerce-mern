@@ -1,18 +1,33 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
-import { _get } from "../../lib/api";
+import { useEffect, useState } from "react";
+import { _delete, _get } from "../../lib/api";
 import axios from "axios";
 
 export default function dashboard() {
+  const [data, setData] = useState([]);
+
   const fetchFeaturedImage = async () => {
-    const response = await _get("feature/get");
-    console.log("response", response);
+    try {
+      const response = await _get("feature/get");
+      setData(response.data);
+    } catch (e) {
+      console.log(e.message);
+    }
   };
   useEffect(() => {
     fetchFeaturedImage();
   }, []);
+
+  // delete featured image
+  const handleDeleteFeatureImage = async (id) => {
+    const response = await _delete(`feature/delete?id=${id}`);
+    if (response.data.success) {
+      fetchFeaturedImage();
+      alert("feature image deleted");
+    }
+  };
   return (
     <>
       <div className="grid w-full max-w-sm items-center gap-3">
@@ -21,17 +36,24 @@ export default function dashboard() {
         <Button>Upload</Button>
       </div>
 
-      <div className="mt-10">
-        <img
-          src="https://picsum.photos/200"
-          alt=""
-          className="w-full h-[300px]"
-        />
-        <div className="flex gap-2 mt-2">
-          <Button>Edit</Button>
-          <Button className="bg-red-500 hover:bg-red-400">Delete</Button>
-        </div>
-      </div>
+      {data?.data?.length > 0 ? (
+        data?.data?.map((v, i) => (
+          <div className="mt-10" key={i}>
+            <img src={v.image} alt="" className="w-full h-[300px]" />
+            <div className="flex gap-2 mt-2">
+              <Button>Edit</Button>
+              <Button
+                className="bg-red-500 hover:bg-red-400"
+                onClick={() => handleDeleteFeatureImage(v._id)}
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        ))
+      ) : (
+        <p className="text-center mt-10">Data not found</p>
+      )}
     </>
   );
 }
