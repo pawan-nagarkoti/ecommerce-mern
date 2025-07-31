@@ -104,10 +104,29 @@ const updateFeatureImage = async (req, res) => {
   }
 };
 
+// fetch single featured image
+const fetchSingleFeaturedImage = async (req, res) => {
+  try {
+    const id = req.query.id;
+    const data = await Feature.findById(id);
+    res.status(200).json({
+      data,
+      message: "fetch feature image",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      success: false,
+      message: `{error message ->  ${error.message}}`,
+    });
+  }
+};
+
 module.exports = {
   addNewFeatureImage,
   fetchFeaturedImages,
   deleteAllFeaturedImage,
   deleteFeaturedImage,
   updateFeatureImage,
+  fetchSingleFeaturedImage,
 };
