@@ -11,6 +11,7 @@ import Home from "./page/shop/home";
 export default function App() {
   return (
     <Routes>
+      <Route path="/" element={<LoginPage />} />
       <Route path="/shop" element={<ShopLayout />}>
         <Route path="home" element={<Home />} />
         <Route path="listing" element={<Listing />} />

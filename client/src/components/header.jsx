@@ -24,14 +24,19 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-black sticky top-0 w-full text-white z-50">
       {/* Left: Logo */}
-      <div className=" flex  gap-2 text-xl font-bold">
+      <div
+        className=" flex  gap-2 text-xl font-bold cursor-pointer"
+        onClick={() => navigate("/shop/home")}
+      >
         <HousePlug className="h-6 w-6" /> Ecommerce
       </div>
 
@@ -40,7 +45,11 @@ export default function Navbar() {
         <Button variant="ghost" className="!mr-0">
           Home
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => navigate("/shop/listing")}
+        >
           Products
         </Button>
         <Button variant="ghost" className="!mr-0">

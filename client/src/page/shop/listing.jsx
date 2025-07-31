@@ -7,12 +7,12 @@ export default function Listing() {
     <>
       <div className="grid grid-cols-12 h-screen overflow-hidden">
         {/* Left Sidebar (sticky) */}
-        <div className="col-span-3 sticky top-20 h-screen overflow-y-auto border-r bg-white p-5">
+        <div className="col-span-2 sticky top-20 h-screen overflow-y-auto border-r bg-white p-5">
           <LeftFilterSidebar />
         </div>
 
         {/* Main Content */}
-        <div className="col-span-9 flex flex-col h-screen overflow-hidden">
+        <div className="col-span-10 flex flex-col h-screen overflow-hidden">
           {/* Top Filter (sticky) */}
           <div className="sticky top-0 z-10 bg-white border-b p-5">
             <TopFilterSidebar />
