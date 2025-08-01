@@ -12,14 +12,18 @@ export default function dashboard() {
   const imageRef = useRef(null);
   const [editFeatureImageData, setEditFeatureImageData] = useState("");
   const [isPreviewImage, setIsPreviewImage] = useState("");
+  const [isFetchingImg, setIsFetchingImg] = useState(false);
 
   // fetch all featured image
   const fetchFeaturedImage = async () => {
     try {
+      setIsFetchingImg(true);
       const response = await _get("feature/get");
       setData(response.data);
     } catch (e) {
       console.log(e.message);
+    } finally {
+      setIsFetchingImg(false);
     }
   };
   useEffect(() => {
@@ -107,12 +111,16 @@ export default function dashboard() {
           <img src={isPreviewImage} alt="" className="h-[200px] w-full" />
         )}
 
-        <Button onClick={hanldeUploadFeaturedImage}>
+        <Button onClick={hanldeUploadFeaturedImage} disabled={isLoading}>
           {isLoading ? <Loader /> : "Upload"}
         </Button>
       </div>
 
-      {data?.data?.length > 0 ? (
+      {isFetchingImg ? (
+        <div className="text-center mt-10 flex justify-center">
+          <Loader />
+        </div>
+      ) : data?.data?.length > 0 ? (
         data?.data?.map((v, i) => (
           <div className="mt-10" key={i}>
             <img src={v.image} alt="" className="w-full h-[300px]" />
