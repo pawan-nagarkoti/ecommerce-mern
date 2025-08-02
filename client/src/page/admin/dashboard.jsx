@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import { _delete, _get, _post, _put } from "../../lib/api";
 import { Loader } from "lucide-react";
 
-export default function dashboard() {
+export default function Dashboard() {
   const [data, setData] = useState([]); // stored fetch featured image
   const [uploadImage, setUploadImage] = useState(""); // stored feature image
   const [isLoading, setIsLoading] = useState(false);
@@ -96,6 +96,7 @@ export default function dashboard() {
       setIsPreviewImage(URL.createObjectURL(uploadImage));
     }
   }, [uploadImage]);
+
   return (
     <>
       <div className="grid w-full max-w-sm items-center gap-3">

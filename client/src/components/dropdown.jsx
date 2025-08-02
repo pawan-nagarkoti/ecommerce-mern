@@ -18,10 +18,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import useUI from "../contexts/UIContext";
 
 export function Dropdown({ data }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
+
+  const getSelectedValue = useUI();
+  React.useEffect(() => {
+    // has we clicked on brand dropdown value ?
+    if (data.find((v) => v.name === "brand")?.name === "brand") {
+      getSelectedValue.setBrandValue(value);
+    } else {
+      getSelectedValue.setCategoryValue(value);
+    }
+  }, [value]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -33,31 +44,31 @@ export function Dropdown({ data }) {
           className="w-full justify-between"
         >
           {value
-            ? data.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            ? data.find((item) => item.value === value)?.label
+            : "Select item..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." className="h-9" />
+          <CommandInput placeholder="Search item..." className="h-9" />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No item found.</CommandEmpty>
             <CommandGroup>
-              {data.map((framework) => (
+              {data.map((item) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={item.value}
+                  value={item.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {framework.label}
+                  {item.label}
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      value === item.value ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

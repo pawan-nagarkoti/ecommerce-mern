@@ -1,15 +1,12 @@
 import { Button } from "@/components/ui/button";
 
-export default function ProductCard() {
+export default function ProductCard({ items }) {
   return (
     <div>
-      <img
-        src="https://picsum.photos/200"
-        alt=""
-        className="w-full h-[300px]"
-      />
-      <h4>Product one</h4>
-      <div>$350</div>
+      <img src={items?.image} alt="" className="w-full h-[300px] mb-3" />
+      <h4 className="font-bold">{items?.title}</h4>
+      <p className="text-[14px]">{items?.description}</p>
+      <div>${items?.price}</div>
       <div className="flex justify-between mt-3">
         <Button>Edit</Button>
         <Button>Delete</Button>

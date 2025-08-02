@@ -1,10 +1,29 @@
 import { Button } from "@/components/ui/button";
 import ProductCard from "../../components/product-card";
 import ProductSlider from "./product-slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { _get } from "../../lib/api";
+import { data } from "react-router-dom";
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData] = useState([]);
+
+  // fetch products
+  const fetchProducts = async () => {
+    try {
+      const response = await _get("/product/get");
+      if (response.data.success === true) {
+        setData(response.data);
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   return (
     <>
       <div className="p-4">
@@ -15,9 +34,11 @@ export default function Product() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-3">
-          {Array.from({ length: 10 }, () => (
-            <ProductCard />
-          ))}
+          {data.data?.length > 0 ? (
+            data.data?.map((v, i) => <ProductCard items={v} key={i} />)
+          ) : (
+            <p className="text-center">No product found</p>
+          )}
         </div>
       </div>
     </>
