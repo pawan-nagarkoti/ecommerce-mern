@@ -145,10 +145,26 @@ const updateProducts = async (req, res) => {
   }
 };
 
+// fetch single products
+const fetchSingleProduct = async (req, res) => {
+  const id = req.query.id;
+  const response = await Product.findById(id);
+  res.status(200).json({
+    data: response,
+    success: true,
+    message: "single product fetched",
+  });
+  try {
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
 module.exports = {
   fetchProducts,
   addProducts,
   deleteAllProducts,
   deleteProduct,
   updateProducts,
+  fetchSingleProduct,
 };
