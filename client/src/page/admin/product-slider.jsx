@@ -24,7 +24,8 @@ export default function ProductSlider({ open, onOpenChange }) {
   const [totalStock, setTotalStock] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { setCallProducts, categoryValue, brandValue } = useUI();
+  const { setCallProducts, categoryValue, brandValue, isOpen, setIsOpen } =
+    useUI();
 
   // add products
   const handleProductSubmit = async (e) => {
@@ -46,7 +47,7 @@ export default function ProductSlider({ open, onOpenChange }) {
       if (res?.data?.success) {
         setCallProducts(true); // fetch all product
         // close the sheet
-        onOpenChange(false);
+        setIsOpen(false);
 
         // reset fields
         setImage("");
@@ -64,7 +65,8 @@ export default function ProductSlider({ open, onOpenChange }) {
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    // <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetContent className="w-[400px] sm:w-[540px] gap-0">
         <SheetHeader>
           <SheetTitle>Add new product</SheetTitle>

@@ -7,9 +7,9 @@ import { data } from "react-router-dom";
 import useUI from "../../contexts/UIContext";
 
 export default function Product() {
-  const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
   const { callProducts, setCallProducts } = useUI();
+  const { setIsOpen } = useUI();
 
   // fetch products
   const fetchProducts = async () => {
@@ -33,7 +33,7 @@ export default function Product() {
         <div className="text-end">
           <Button onClick={() => setIsOpen(true)}>Add new product</Button>
 
-          <ProductSlider open={isOpen} onOpenChange={setIsOpen} />
+          <ProductSlider />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-3">
