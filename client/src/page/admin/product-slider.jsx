@@ -24,7 +24,7 @@ export default function ProductSlider({ open, onOpenChange }) {
   const [totalStock, setTotalStock] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const values = useUI(); //  use context
+  const { setCallProducts, categoryValue, brandValue } = useUI();
 
   // add products
   const handleProductSubmit = async (e) => {
@@ -36,14 +36,15 @@ export default function ProductSlider({ open, onOpenChange }) {
     v.append("price", price);
     v.append("salePrice", salePrice);
     v.append("totalStock", totalStock);
-    v.append("category", values.categoryValue);
-    v.append("brand", values.brandValue);
+    v.append("category", categoryValue);
+    v.append("brand", brandValue);
 
     try {
       setIsLoading(true);
       const res = await _post("product/add", v);
 
       if (res?.data?.success) {
+        setCallProducts(true); // fetch all product
         // close the sheet
         onOpenChange(false);
 

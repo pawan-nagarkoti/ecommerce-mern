@@ -4,10 +4,12 @@ import ProductSlider from "./product-slider";
 import { useEffect, useState } from "react";
 import { _get } from "../../lib/api";
 import { data } from "react-router-dom";
+import useUI from "../../contexts/UIContext";
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
+  const { callProducts, setCallProducts } = useUI();
 
   // fetch products
   const fetchProducts = async () => {
@@ -23,7 +25,8 @@ export default function Product() {
   };
   useEffect(() => {
     fetchProducts();
-  }, []);
+    setCallProducts(false);
+  }, [callProducts]);
   return (
     <>
       <div className="p-4">
