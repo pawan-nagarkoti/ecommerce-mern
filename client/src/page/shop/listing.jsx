@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import LeftFilterSidebar from "../../components/leftFilterSidebar";
 import TopFilterSidebar from "../../components/topFilterSidebar";
 import ProductList from "../../components/product-list";
+import { _get } from "../../lib/api";
+
 export default function Listing() {
+  const [data, setData] = useState([]);
+
+  // fetch all products
+  const fetchProduct = async () => {
+    try {
+      const res = await _get("product/get");
+      if (res.data.success) {
+        setData(res.data);
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    fetchProduct();
+  }, []);
   return (
     <>
       <div className="grid grid-cols-12 h-screen overflow-hidden">
@@ -21,9 +40,11 @@ export default function Listing() {
           {/* Product List (scrollable) */}
           <div className="overflow-y-auto flex-1 p-4">
             <div className="grid grid-cols-4 gap-5 my-5">
-              {Array.from({ length: 10 }, () => (
-                <ProductList />
-              ))}
+              {data?.data?.length > 0 ? (
+                data.data.map((v, i) => <ProductList item={v} key={i} />)
+              ) : (
+                <p className="text-center">Product not found</p>
+              )}
             </div>
           </div>
         </div>
