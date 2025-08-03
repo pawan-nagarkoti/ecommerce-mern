@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import useUI from "../contexts/UIContext";
 
-export function Dropdown({ data }) {
+export function Dropdown({ data, selectedValue = "" }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
 
@@ -43,7 +43,9 @@ export function Dropdown({ data }) {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
+          {selectedValue && !value //if we have default value and don't have value
+            ? selectedValue
+            : value
             ? data.find((item) => item.value === value)?.label
             : "Select item..."}
           <ChevronsUpDown className="opacity-50" />

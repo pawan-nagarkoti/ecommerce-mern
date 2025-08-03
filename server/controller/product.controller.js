@@ -116,9 +116,12 @@ const deleteProduct = async (req, res) => {
 const updateProducts = async (req, res) => {
   try {
     const up = req.body;
-    const upID = req.query.id;
-    const img = req.file.path;
-    const productImage = await uploadOnCloudinary(img);
+    const upID = req?.query?.id;
+    const img = req?.file?.path;
+
+    const productImage = req?.body?.image
+      ? req.body.image
+      : await uploadOnCloudinary(img);
 
     const updatedProductObj = {
       title: up.title,
@@ -128,7 +131,7 @@ const updateProducts = async (req, res) => {
       price: up.price,
       salePrice: up.salePrice,
       stock: up.stock,
-      image: productImage.url,
+      image: req.body.image ? req.body.image : productImage.url,
     };
     const updatedProduct = await Product.findByIdAndUpdate(
       upID,
@@ -139,6 +142,7 @@ const updateProducts = async (req, res) => {
     res.status(200).json({
       data: updatedProduct,
       message: "Product updated",
+      success: true,
     });
   } catch (error) {
     console.log(error.message);

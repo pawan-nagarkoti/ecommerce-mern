@@ -3,7 +3,12 @@ import { _delete } from "../lib/api";
 import useUI from "../contexts/UIContext";
 
 export default function ProductCard({ items }) {
-  const { setCallProducts } = useUI();
+  const {
+    setCallProducts,
+    setIsOpen,
+    setHasEditProductBtnClicked,
+    setIsProductId,
+  } = useUI();
   // deleted product
   const handleDeleteProduct = async (id) => {
     try {
@@ -25,7 +30,15 @@ export default function ProductCard({ items }) {
       <p className="text-[14px]">{items?.description}</p>
       <div>${items?.price}</div>
       <div className="flex justify-between mt-3">
-        <Button>Edit</Button>
+        <Button
+          onClick={() => {
+            setIsOpen(true);
+            setHasEditProductBtnClicked(true);
+            setIsProductId(items?._id);
+          }}
+        >
+          Edit
+        </Button>
         <Button onClick={() => handleDeleteProduct(items._id)}>Delete</Button>
       </div>
     </div>

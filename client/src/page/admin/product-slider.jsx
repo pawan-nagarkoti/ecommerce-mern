@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Dropdown } from "../../components/dropdown";
 import { brand, category } from "../../lib/constant";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useUI from "../../contexts/UIContext";
-import { _get, _post } from "../../lib/api";
+import { _get, _post, _put } from "../../lib/api";
 
-export default function ProductSlider({ open, onOpenChange }) {
+export default function ProductSlider() {
   const [image, setImage] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -23,32 +23,42 @@ export default function ProductSlider({ open, onOpenChange }) {
   const [salePrice, setSalePrice] = useState("");
   const [totalStock, setTotalStock] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isPreviewImage, setISPreviewImage] = useState("");
+  const [data, setData] = useState("");
 
-  const { setCallProducts, categoryValue, brandValue, isOpen, setIsOpen } =
-    useUI();
+  const {
+    setCallProducts,
+    categoryValue,
+    brandValue,
+    isOpen,
+    setIsOpen,
+    hasEditPrductBtnClicked,
+    isProductId,
+    setIsProductId,
+    setHasEditProductBtnClicked,
+  } = useUI();
 
   // add products
   const handleProductSubmit = async (e) => {
     e.preventDefault();
+
     const v = new FormData();
-    v.append("image", image);
+    v.append("image", image ? image : data.image);
     v.append("title", title);
     v.append("description", description);
     v.append("price", price);
     v.append("salePrice", salePrice);
-    v.append("totalStock", totalStock);
-    v.append("category", categoryValue);
-    v.append("brand", brandValue);
+    v.append("stock", totalStock);
+    v.append("category", categoryValue ? categoryValue : data.category);
+    v.append("brand", brandValue ? brandValue : data.brand);
 
     try {
       setIsLoading(true);
-      const res = await _post("product/add", v);
+      const res = data._id
+        ? await _put(`product/update?id=${data._id}`, v)
+        : await _post("product/add", v);
 
       if (res?.data?.success) {
-        setCallProducts(true); // fetch all product
-        // close the sheet
-        setIsOpen(false);
-
         // reset fields
         setImage("");
         setTitle("");
@@ -56,6 +66,13 @@ export default function ProductSlider({ open, onOpenChange }) {
         setPrice("");
         setSalePrice("");
         setTotalStock("");
+        setData("");
+        setISPreviewImage("");
+        setCallProducts(true); // fetch all product
+        setIsProductId("");
+        // close the sheet
+        setIsOpen(false);
+        setHasEditProductBtnClicked(false);
       }
     } catch (e) {
       console.log(e.message);
@@ -63,6 +80,46 @@ export default function ProductSlider({ open, onOpenChange }) {
       setIsLoading(false);
     }
   };
+
+  // fetch single product
+  const fetchSingleProduct = async () => {
+    try {
+      const response = await _get(`product/single?id=${isProductId}`);
+      const r = response.data.data;
+      setData(r);
+      setTitle(r.title ?? "");
+      setDescription(r.description ?? "");
+      setPrice(r.price ?? "");
+      setSalePrice(r.salePrice ?? "");
+      setTotalStock(r.stock ?? "");
+      setISPreviewImage(r.image);
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+    }
+  };
+  useEffect(() => {
+    if (hasEditPrductBtnClicked) {
+      fetchSingleProduct();
+    }
+  }, [hasEditPrductBtnClicked]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setImage("");
+      setTitle("");
+      setDescription("");
+      setPrice("");
+      setSalePrice("");
+      setTotalStock("");
+      setData("");
+      setISPreviewImage("");
+      setCallProducts(true); // fetch all product
+      setIsProductId("");
+      setIsOpen(false);
+      setHasEditProductBtnClicked(false);
+    }
+  }, [isOpen]);
 
   return (
     // <Sheet open={open} onOpenChange={onOpenChange}>
@@ -80,8 +137,23 @@ export default function ProductSlider({ open, onOpenChange }) {
                 id="picture"
                 type="file"
                 name="image"
-                onChange={(e) => setImage(e.target.files[0])}
+                onChange={(e) => {
+                  const file = e.target.files?.[0] || null;
+                  setImage(file);
+                  if (file) {
+                    setISPreviewImage(URL.createObjectURL(file));
+                  }
+                }}
               />
+
+              {/* preview image */}
+              {isPreviewImage && (
+                <img
+                  src={isPreviewImage || ""}
+                  alt=""
+                  className="h-[200px] w-full"
+                />
+              )}
 
               <Label htmlFor="title" className="mt-3">
                 Title
@@ -108,12 +180,12 @@ export default function ProductSlider({ open, onOpenChange }) {
               <Label htmlFor="title" className="mt-3">
                 Category
               </Label>
-              <Dropdown data={category} />
+              <Dropdown data={category} selectedValue={data?.category} />
 
               <Label htmlFor="title" className="mt-3">
                 Brand
               </Label>
-              <Dropdown data={brand} />
+              <Dropdown data={brand} selectedValue={data?.brand} />
 
               <Label htmlFor="productPrice" className="mt-3">
                 Price
