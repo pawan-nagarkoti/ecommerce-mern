@@ -7,25 +7,44 @@ import { _get } from "../../lib/api";
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const [productData, setProductData] = useState([]);
 
   // fetch feature image
   const fetchFeatureImage = async () => {
     try {
       const res = await _get("feature/get");
       if (res.status === 200) {
-        setData(res);
+        setData(res ?? []);
       }
     } catch (e) {
       console.log(e.message);
     }
   };
+
+  // fetch all products
+  const fetchProduct = async () => {
+    try {
+      const res = await _get(`product/get`);
+      if (res.data.success) {
+        setProductData(res.data);
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+    }
+  };
   useEffect(() => {
     fetchFeatureImage();
+    fetchProduct();
   }, []);
 
   return (
     <>
-      {data?.data?.data.length > 0 && <Slider items={data?.data?.data} />}
+      {data?.data?.data?.length > 0 ? (
+        <Slider items={data?.data?.data} />
+      ) : (
+        <p>No feature image found.</p>
+      )}
       <div className="container m-auto">
         <div className="my-20">
           <FilterTag {...shopByCategory} />
@@ -39,9 +58,11 @@ export default function Home() {
           <h2 className="text-center text-2xl mb-5">Feature Products</h2>
 
           <div className="grid grid-cols-4 gap-5">
-            {Array.from({ length: 10 }, () => (
-              <ProductList />
-            ))}
+            {productData?.data?.length > 0 ? (
+              productData.data.map((v, i) => <ProductList item={v} key={i} />)
+            ) : (
+              <p className="text-center">Product not found</p>
+            )}
           </div>
         </div>
       </div>
