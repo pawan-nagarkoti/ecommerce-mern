@@ -3,14 +3,19 @@ import LeftFilterSidebar from "../../components/leftFilterSidebar";
 import TopFilterSidebar from "../../components/topFilterSidebar";
 import ProductList from "../../components/product-list";
 import { _get } from "../../lib/api";
+import { useSearchParams } from "react-router-dom";
 
 export default function Listing() {
   const [data, setData] = useState([]);
+  const [searchParams] = useSearchParams();
+
+  const category = searchParams.get("category") ?? "";
+  const brand = searchParams.get("brand") ?? "";
 
   // fetch all products
   const fetchProduct = async () => {
     try {
-      const res = await _get("product/get");
+      const res = await _get(`product/get?category=${category}&brand=${brand}`);
       if (res.data.success) {
         setData(res.data);
       }
@@ -21,7 +26,7 @@ export default function Listing() {
   };
   useEffect(() => {
     fetchProduct();
-  }, []);
+  }, [category, brand]);
   return (
     <>
       <div className="grid grid-cols-12 h-screen overflow-hidden">

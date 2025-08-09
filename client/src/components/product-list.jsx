@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-export default function ProductList({ item }) {
+export default function ProductList({ item = {} }) {
   return (
     <>
       <Card className="p-2 gap-2">
