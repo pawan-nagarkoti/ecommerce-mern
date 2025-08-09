@@ -1,12 +1,31 @@
+import { useEffect, useState } from "react";
 import { Slider } from "../../components/Slider";
 import FilterTag from "../../components/filterTag";
 import ProductList from "../../components/product-list";
 import { shopByBrand, shopByCategory } from "../../lib/constant";
+import { _get } from "../../lib/api";
 
 export default function Home() {
+  const [data, setData] = useState([]);
+
+  // fetch feature image
+  const fetchFeatureImage = async () => {
+    try {
+      const res = await _get("feature/get");
+      if (res.status === 200) {
+        setData(res);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+  useEffect(() => {
+    fetchFeatureImage();
+  }, []);
+
   return (
     <>
-      <Slider />
+      {data?.data?.data.length > 0 && <Slider items={data?.data?.data} />}
       <div className="container m-auto">
         <div className="my-20">
           <FilterTag {...shopByCategory} />

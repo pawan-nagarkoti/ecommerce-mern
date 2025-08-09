@@ -12,7 +12,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 
-export function Slider() {
+export function Slider({ items = [] }) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
@@ -25,21 +25,21 @@ export function Slider() {
       onMouseLeave={plugin.current.reset}
     >
       <CarouselContent className="h-[500px]">
-        {Array.from({ length: 5 }).map((_, index) => (
+        {items.map((v, index) => (
           <CarouselItem key={index} className="h-[500px]">
             <div className=" h-[500px]">
-              <img
-                src="https://picsum.photos/200"
-                alt=""
-                className="w-full overflow-hidden"
-              />
+              <img src={v?.image} alt="" className="w-full overflow-hidden" />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
 
-      <CarouselPrevious className=" left-5" />
-      <CarouselNext className=" right-5" />
+      {items?.length > 1 && (
+        <>
+          <CarouselPrevious className=" left-5" />
+          <CarouselNext className=" right-5" />
+        </>
+      )}
     </Carousel>
   );
 }
