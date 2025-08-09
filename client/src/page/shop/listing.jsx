@@ -8,14 +8,21 @@ import { useSearchParams } from "react-router-dom";
 export default function Listing() {
   const [data, setData] = useState([]);
   const [searchParams] = useSearchParams();
+  const [sortByValue, setSortByValue] = useState("");
 
   const category = searchParams.get("category") ?? "";
   const brand = searchParams.get("brand") ?? "";
 
+  const onSortChange = (value) => {
+    setSortByValue(value);
+  };
+
   // fetch all products
   const fetchProduct = async () => {
     try {
-      const res = await _get(`product/get?category=${category}&brand=${brand}`);
+      const res = await _get(
+        `product/get?category=${category}&brand=${brand}&sortBy=${sortByValue}`
+      );
       if (res.data.success) {
         setData(res.data);
       }
@@ -26,7 +33,8 @@ export default function Listing() {
   };
   useEffect(() => {
     fetchProduct();
-  }, [category, brand]);
+  }, [category, brand, sortByValue]);
+
   return (
     <>
       <div className="grid grid-cols-12 h-screen overflow-hidden">
@@ -39,7 +47,10 @@ export default function Listing() {
         <div className="col-span-10 flex flex-col h-screen overflow-hidden">
           {/* Top Filter (sticky) */}
           <div className="sticky top-0 z-10 bg-white border-b p-5">
-            <TopFilterSidebar />
+            <TopFilterSidebar
+              totalItem={data?.data}
+              onSortChange={onSortChange}
+            />
           </div>
 
           {/* Product List (scrollable) */}

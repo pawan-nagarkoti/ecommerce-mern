@@ -3,86 +3,86 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-import { ListFilter, List, SortAsc, SortDesc, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
+import { useState } from "react";
 
-export default function TopFilterSidebar() {
+export default function TopFilterSidebar({ totalItem = [], onSortChange }) {
+  const [dropdownValue, setDropdownValue] = useState("price-lowToHigh");
+
+  const handleSort = (value) => {
+    setDropdownValue(value);
+    if (onSortChange) {
+      onSortChange(value);
+    }
+  };
+
   return (
-    <>
-      <div className="flex justify-between">
-        <h2 className="font-bold">All Products</h2>
-        <div className="flex gap-3 items-center">
-          <p className="text-sm">3 Products</p>
+    <div className="flex justify-between">
+      <h2 className="font-bold">All Products</h2>
+      <div className="flex gap-3 items-center">
+        <p className="text-sm">{totalItem.length} Products</p>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                {" "}
-                <ArrowUpDown /> Sort by
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  Profile
-                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Billing
-                  <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Settings
-                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Keyboard shortcuts
-                  <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuItem>Email</DropdownMenuItem>
-                      <DropdownMenuItem>Message</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>More...</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-                <DropdownMenuItem>
-                  New Team
-                  <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>GitHub</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuItem disabled>API</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                Log out
-                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              <ArrowUpDown /> Sort by
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="start">
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                onSelect={() => handleSort("price-lowToHigh")}
+                style={{
+                  background:
+                    dropdownValue === "price-lowToHigh" ? "black" : undefined,
+                  color:
+                    dropdownValue === "price-lowToHigh" ? "white" : undefined,
+                }}
+              >
+                Price: Low to High
+                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
               </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+              <DropdownMenuItem
+                onSelect={() => handleSort("price-highToLow")}
+                style={{
+                  background:
+                    dropdownValue === "price-highToLow" ? "black" : undefined,
+                  color:
+                    dropdownValue === "price-highToLow" ? "white" : undefined,
+                }}
+              >
+                Price: High to Low
+                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => handleSort("title-aToz")}
+                style={{
+                  background:
+                    dropdownValue === "title-aToz" ? "black" : undefined,
+                  color: dropdownValue === "title-aToz" ? "white" : undefined,
+                }}
+              >
+                Title: A to Z<DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onSelect={() => handleSort("title-zToa")}
+                style={{
+                  background:
+                    dropdownValue === "title-zToa" ? "black" : undefined,
+                  color: dropdownValue === "title-zToa" ? "white" : undefined,
+                }}
+              >
+                Title: Z to A<DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
-    </>
+    </div>
   );
 }
