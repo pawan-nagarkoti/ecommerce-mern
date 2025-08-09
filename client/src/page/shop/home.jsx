@@ -47,11 +47,11 @@ export default function Home() {
       )}
       <div className="container m-auto">
         <div className="my-20">
-          <FilterTag {...shopByCategory} />
+          <FilterTag {...shopByCategory} tagname="category" />
         </div>
 
         <div className="my-20">
-          <FilterTag {...shopByBrand} />
+          <FilterTag {...shopByBrand} tagname="brand" />
         </div>
 
         <div className="my-20">
