@@ -11,4 +11,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  server: {
+    port: 5173,
+    proxy: {
+      // forward /api/* to the Express server
+      "/api": "http://localhost:5000",
+    },
+  },
 });
