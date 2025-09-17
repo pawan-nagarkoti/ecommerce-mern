@@ -54,7 +54,7 @@ export function LoginForm({ className, ...props }) {
       if (response.data.status) {
         console.log(response.data);
         localStorage.setItem("token", response.data.accessToken);
-        localStorage.setItem("loginUser", response.data.user);
+        localStorage.setItem("loginUser", JSON.stringify(response.data.user));
         navigate("/shop/home");
       }
     } catch (e) {

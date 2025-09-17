@@ -86,8 +86,10 @@ export default function Navbar() {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuGroup>
+              <DropdownMenuLabel>
+                {JSON.parse(localStorage.getItem("loginUser"))?.userName}
+              </DropdownMenuLabel>
+              {/* <DropdownMenuGroup>
                 <DropdownMenuItem>
                   Profile
                   <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
@@ -128,14 +130,15 @@ export default function Navbar() {
               <DropdownMenuItem>GitHub</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuItem disabled>API</DropdownMenuItem>
-              <DropdownMenuSeparator />
+              <DropdownMenuSeparator /> */}
               <DropdownMenuItem
                 onClick={() => {
                   localStorage.removeItem("token"), navigate("/");
                 }}
+                className="cursor-pointer"
               >
                 Log out
-                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
