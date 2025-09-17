@@ -16,6 +16,10 @@ export function LoginForm({ className, ...props }) {
   const [password, setPassword] = useState("");
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
 
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+
   // register user
   const handleUserRegisterForm = async (e) => {
     e.preventDefault();
@@ -39,6 +43,27 @@ export function LoginForm({ className, ...props }) {
   };
 
   // login user
+  const handleUserLoginForm = async (e) => {
+    e.preventDefault();
+    setIsLoginLoading(true);
+    try {
+      const response = await _post("/auth/login", {
+        email: loginEmail,
+        password: loginPassword,
+      });
+      if (response.data.status) {
+        console.log(response.data);
+        localStorage.setItem("token", response.data.accessToken);
+        localStorage.setItem("loginUser", response.data.user);
+        navigate("/shop/home");
+      }
+    } catch (e) {
+      console.log(e.message);
+      alert(e.response.data.message);
+    } finally {
+      setIsLoginLoading(false);
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -50,7 +75,7 @@ export function LoginForm({ className, ...props }) {
                 <h1 className="text-2xl font-bold">Ecommerce Application</h1>
               </div>
               {!isToggle ? (
-                <div>
+                <form onSubmit={handleUserLoginForm}>
                   <div className="grid gap-3 mb-5">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -58,6 +83,7 @@ export function LoginForm({ className, ...props }) {
                       type="email"
                       placeholder="m@example.com"
                       required
+                      onChange={(e) => setLoginEmail(e.target.value)}
                     />
                   </div>
                   <div className="grid gap-3">
@@ -75,16 +101,13 @@ export function LoginForm({ className, ...props }) {
                       type="password"
                       required
                       className="mb-5"
+                      onChange={(e) => setLoginPassword(e.target.value)}
                     />
                   </div>
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    onClick={() => navigate("/shop/home")}
-                  >
-                    Login
+                  <Button type="submit" className="w-full">
+                    {isLoginLoading ? "Loading..." : "Login"}
                   </Button>
-                </div>
+                </form>
               ) : (
                 <form onSubmit={handleUserRegisterForm}>
                   <div className="grid gap-3">
@@ -169,7 +192,7 @@ export function LoginForm({ className, ...props }) {
                   type="button"
                   onClick={() => setIsToggle((prev) => !prev)}
                 >
-                  {!isToggle ? "login" : "Sign up"}
+                  {isToggle ? "login" : "Sign up"}
                 </button>
               </div>
             </div>

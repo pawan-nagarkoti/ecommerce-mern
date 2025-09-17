@@ -129,7 +129,11 @@ export default function Navbar() {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuItem disabled>API</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  localStorage.removeItem("token"), navigate("/");
+                }}
+              >
                 Log out
                 <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
               </DropdownMenuItem>
@@ -166,6 +170,9 @@ export default function Navbar() {
                   type="button"
                   variant="outline"
                   className="flex items-center gap-2 w-full"
+                  onClick={() => {
+                    localStorage.removeItem("token"), navigate("/");
+                  }}
                 >
                   <LogOut className="w-4 h-4" />
                   Logout
