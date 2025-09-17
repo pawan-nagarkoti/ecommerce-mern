@@ -4,50 +4,129 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { _post } from "../lib/api";
 
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
+  const [isToggle, setIsToggle] = useState(false); // toggle login and sign up form
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+
+  // register user
+  const handleUserRegisterForm = async (e) => {
+    e.preventDefault();
+    setIsRegisterLoading(true);
+    try {
+      const response = await _post("/auth/register", {
+        userName: username,
+        email,
+        password,
+      });
+      if (response.data.success) {
+        alert(response.data.message);
+        setIsToggle(false);
+      }
+    } catch (e) {
+      console.log(e.message);
+      alert(e.response.data.message);
+    } finally {
+      setIsRegisterLoading(false);
+    }
+  };
+
+  // login user
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <div className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-balance">
-                  Login to your Acme Inc account
-                </p>
+                <h1 className="text-2xl font-bold">Ecommerce Application</h1>
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                />
-              </div>
-              <div className="grid gap-3">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
+              {!isToggle ? (
+                <div>
+                  <div className="grid gap-3 mb-5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                      required
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password</Label>
+                      {/* <a
                     href="#"
                     className="ml-auto text-sm underline-offset-2 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </a> */}
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      className="mb-5"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    onClick={() => navigate("/shop/home")}
+                  >
+                    Login
+                  </Button>
                 </div>
-                <Input id="password" type="password" required />
-              </div>
-              <Button
-                type="submit"
-                className="w-full"
-                onClick={() => navigate("/shop/home")}
-              >
-                Login
-              </Button>
-              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+              ) : (
+                <form onSubmit={handleUserRegisterForm}>
+                  <div className="grid gap-3">
+                    <div className="flex items-center">
+                      <Label htmlFor="username">Username</Label>
+                    </div>
+                    <Input
+                      id="username"
+                      type="text"
+                      required
+                      className="mb-5"
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-3 mb-5">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="grid gap-3">
+                    <div className="flex items-center">
+                      <Label htmlFor="password">Password</Label>
+                    </div>
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      className="mb-5"
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+
+                  <Button type="submit" className="w-full">
+                    {isRegisterLoading ? "Loading..." : "Sign up"}
+                  </Button>
+                </form>
+              )}
+              {/* <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">
                   Or continue with
                 </span>
@@ -80,15 +159,21 @@ export function LoginForm({ className, ...props }) {
                   </svg>
                   <span className="sr-only">Login with Meta</span>
                 </Button>
-              </div>
+              </div> */}
+
               <div className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <a href="#" className="underline underline-offset-4">
-                  Sign up
-                </a>
+                {isToggle ? "I have an account" : `Don't have an account`}{" "}
+                &nbsp;
+                <button
+                  className="underline underline-offset-4"
+                  type="button"
+                  onClick={() => setIsToggle((prev) => !prev)}
+                >
+                  {!isToggle ? "login" : "Sign up"}
+                </button>
               </div>
             </div>
-          </form>
+          </div>
           <div className="bg-muted relative hidden md:block">
             <img
               src="https://picsum.photos/200/300"
@@ -98,10 +183,10 @@ export function LoginForm({ className, ...props }) {
           </div>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+      {/* <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
         and <a href="#">Privacy Policy</a>.
-      </div>
+      </div> */}
     </div>
   );
 }
