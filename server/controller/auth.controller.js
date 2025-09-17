@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 // add new user (Register)
 const registerUser = async (req, res) => {
   try {
@@ -8,7 +8,7 @@ const registerUser = async (req, res) => {
 
     const checkUser = await User.findOne({ email });
     if (checkUser) {
-      return res.status(300).json({
+      return res.status(400).json({
         success: false,
         message: "User Already exists with the same email! Please try again",
       });
@@ -32,4 +32,55 @@ const registerUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser };
+// login user
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // email check
+    const checkUser = await User.findOne({ email });
+    if (!checkUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User doesn't exists! Please register first",
+      });
+    }
+
+    // password match
+    const passwordCheck = await bcrypt.compare(password, checkUser.password);
+    if (!passwordCheck) {
+      return res.json({
+        success: false,
+        message: "Incorrect password! Please try again",
+      });
+    }
+
+    // create jwt token
+    const token = jwt.sign(
+      {
+        id: checkUser._id,
+        userName: checkUser.userName,
+        role: checkUser.role,
+        email: checkUser.email,
+      },
+      "CLIENT_SECRET_KEY",
+      { expiresIn: "60m" }
+    );
+
+    res.status(200).json({
+      status: true,
+      message: "Login successfully",
+      accessToken: token,
+      user: {
+        email: checkUser.email,
+        role: checkUser.role,
+        id: checkUser._id,
+        userName: checkUser.userName,
+      },
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+module.exports = { registerUser, loginUser };
