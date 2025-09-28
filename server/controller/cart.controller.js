@@ -77,6 +77,25 @@ const addToCart = async (req, res) => {
   }
 };
 
+const fetchCartData = async (req, res) => {
+  try {
+    const { uniqueID } = req.body;
+    const cartData = await Cart.find({ uniqueID });
+    const totalAmount = cartData
+      .map((v) => v.totalPrice)
+      .reduce((a, v) => (a += v), 0);
+
+    res.status(200).json({
+      data: cartData,
+      totalAmount,
+      message: "Cart data successfully",
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
 module.exports = {
   addToCart,
+  fetchCartData,
 };
