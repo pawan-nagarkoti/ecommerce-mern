@@ -84,7 +84,7 @@ export default function Cart() {
 
         <div class="flex items-center justify-between border-t pt-4">
           <span class="font-semibold">Total</span>
-          <span class="font-semibold">${cartData.data.totalAmount}</span>
+          <span class="font-semibold">${cartData?.data?.totalAmount}</span>
         </div>
 
         <button class="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90">
