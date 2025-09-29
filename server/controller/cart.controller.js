@@ -79,8 +79,9 @@ const addToCart = async (req, res) => {
 
 const fetchCartData = async (req, res) => {
   try {
-    const { uniqueID } = req.body;
-    const cartData = await Cart.find({ uniqueID });
+    const { id } = req.params;
+    const cartData = await Cart.find({ uniqueID: id }).populate("productID");
+
     const totalAmount = cartData
       .map((v) => v.totalPrice)
       .reduce((a, v) => (a += v), 0);
