@@ -95,7 +95,25 @@ const fetchCartData = async (req, res) => {
   }
 };
 
+const deleteCartItem = async (req, res) => {
+  const deletedID = req.params.id;
+
+  const itemDelete = await Cart.findByIdAndDelete(deletedID);
+
+  if (itemDelete) {
+    return res.status(200).json({
+      data: itemDelete,
+      message: "Item deleted",
+    });
+  } else {
+    return res.status(400).json({
+      message: "Not found",
+    });
+  }
+};
+
 module.exports = {
   addToCart,
   fetchCartData,
+  deleteCartItem,
 };
