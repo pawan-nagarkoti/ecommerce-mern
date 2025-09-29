@@ -25,9 +25,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
+import { SheetDemo } from "./sheet";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [isOpenCart, setIsOpenCart] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -70,13 +72,17 @@ export default function Navbar() {
         <Button variant="ghost" className="!mr-0">
           Search
         </Button>
+        <SheetDemo isOpenCart={isOpenCart} setIsOpenCart={setIsOpenCart} />
       </div>
 
       {/* Right side: Logout (desktop) and Hamburger (mobile) */}
       <div className="flex items-center gap-4">
         {/* Logout button for desktop */}
         <div className="hidden md:flex items-center gap-3">
-          <ShoppingCart />
+          <div onClick={() => setIsOpenCart(true)}>
+            {/* <div onClick={() => alert("hiii")}> */}
+            <ShoppingCart />
+          </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
