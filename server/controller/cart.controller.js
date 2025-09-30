@@ -125,6 +125,7 @@ const updateCartItem = async (req, res) => {
     switch (sign) {
       case "increment":
         const quantityIncrease = data.map((v) => v.quantity + 1);
+
         const cartUpdateAfterIncrement = await Cart.findByIdAndUpdate(
           id,
           {
@@ -140,6 +141,14 @@ const updateCartItem = async (req, res) => {
         break;
       case "decrement":
         const quntityDecrease = data.map((v) => v.quantity - 1);
+        if (quntityDecrease[0] === 0) {
+          const deleteCartItem = await Cart.findByIdAndDelete(id);
+          return res.status(200).json({
+            data: deleteCartItem,
+            message: "cart item deleted",
+          });
+        }
+
         const cartUpdateAfterDecrement = await Cart.findByIdAndUpdate(
           id,
           {

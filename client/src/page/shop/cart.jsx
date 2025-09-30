@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { _delete, _get } from "../../lib/api";
+import { _delete, _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 
 export default function Cart() {
@@ -33,6 +33,22 @@ export default function Cart() {
       console.log(e.message);
     }
   };
+
+  const handleQuantity = async (id, value, price) => {
+    try {
+      const response = await _put("cart/update", {
+        id: id,
+        sign: value,
+        price: price,
+      });
+
+      if (response.status === 200) {
+        fetchCartData();
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   return (
     <>
       <div className="px-5 py-4 space-y-6">
@@ -51,6 +67,7 @@ export default function Cart() {
                     <p className="font-semibold leading-5">
                       {v.productID.title}
                     </p>
+                    <p className="font-extralight text-[10px]">{v.price}</p>
                   </div>
                   <p className="text-sm font-medium text-gray-800">
                     $ {v.totalPrice}
@@ -62,6 +79,9 @@ export default function Cart() {
                     <button
                       className="px-3 py-1.5 text-lg leading-none hover:bg-gray-50"
                       aria-label="Decrease"
+                      onClick={() =>
+                        handleQuantity(v._id, "decrement", v.price)
+                      }
                     >
                       −
                     </button>
@@ -71,6 +91,9 @@ export default function Cart() {
                     <button
                       className="px-3 py-1.5 text-lg leading-none hover:bg-gray-50"
                       aria-label="Increase"
+                      onClick={() =>
+                        handleQuantity(v._id, "increment", v.price)
+                      }
                     >
                       +
                     </button>
@@ -104,14 +127,20 @@ export default function Cart() {
           <p>No data found</p>
         )}
 
-        <div className="flex items-center justify-between border-t pt-4">
-          <span className="font-semibold">Total</span>
-          <span className="font-semibold">${cartData?.data?.totalAmount}</span>
-        </div>
+        {cartData?.data?.data?.length > 0 && (
+          <>
+            <div className="flex items-center justify-between border-t pt-4">
+              <span className="font-semibold">Total</span>
+              <span className="font-semibold">
+                ${cartData?.data?.totalAmount}
+              </span>
+            </div>
 
-        <button className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90">
-          Checkout
-        </button>
+            <button className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90">
+              Checkout
+            </button>
+          </>
+        )}
       </div>
     </>
   );
