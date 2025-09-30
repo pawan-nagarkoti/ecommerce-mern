@@ -55,7 +55,7 @@ export default function Listing() {
 
           {/* Product List (scrollable) */}
           <div className="overflow-y-auto flex-1 p-4">
-            <div className="grid grid-cols-4 gap-5 my-5">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5 my-5">
               {data?.data?.length > 0 ? (
                 data.data.map((v, i) => <ProductList item={v} key={i} />)
               ) : (

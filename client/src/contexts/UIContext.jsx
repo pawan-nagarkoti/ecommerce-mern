@@ -10,6 +10,7 @@ export const UIProvider = ({ children }) => {
   const [hasEditPrductBtnClicked, setHasEditProductBtnClicked] =
     useState(false);
   const [isProductId, setIsProductId] = useState(null);
+  const [nofityToTheCart, setNotifyToTheCart] = useState(false);
 
   return (
     <UIContext.Provider
@@ -26,6 +27,8 @@ export const UIProvider = ({ children }) => {
         setHasEditProductBtnClicked,
         isProductId,
         setIsProductId,
+        nofityToTheCart,
+        setNotifyToTheCart,
       }}
     >
       {children}

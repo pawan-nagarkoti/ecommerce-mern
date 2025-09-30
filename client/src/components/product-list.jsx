@@ -8,8 +8,30 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { _post } from "../lib/api";
+import useUI from "../contexts/UIContext";
 
 export default function ProductList({ item = {} }) {
+  const userID = JSON.parse(localStorage.getItem("loginUser")).id;
+  const { setNotifyToTheCart } = useUI();
+
+  const handleAddToCart = async (price, productID) => {
+    try {
+      const response = await _post("cart/add", {
+        userID: userID,
+        productID: productID,
+        price: price,
+      });
+      if (response.status === 200) {
+        console.log("bddsfs");
+        setNotifyToTheCart(true);
+        alert("Prdocut added on cart");
+      }
+    } catch (e) {
+      console.log(e.message);
+      alert(e.response.data.message);
+    }
+  };
   return (
     <>
       <Card className="p-2 gap-2">
@@ -28,7 +50,12 @@ export default function ProductList({ item = {} }) {
           <p className="mt-4">${item.price}</p>
         </CardContent>
         <CardFooter className=" p-0">
-          <Button className="w-full">Add to cart</Button>
+          <Button
+            className="w-full"
+            onClick={() => handleAddToCart(item.price, item._id)}
+          >
+            Add to cart
+          </Button>
         </CardFooter>
       </Card>
     </>

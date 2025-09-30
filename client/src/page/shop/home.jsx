@@ -57,7 +57,7 @@ export default function Home() {
         <div className="my-20">
           <h2 className="text-center text-2xl mb-5">Feature Products</h2>
 
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid gird-cols-1 md:grid-cols-4 gap-5">
             {productData?.data?.length > 0 ? (
               productData.data.map((v, i) => <ProductList item={v} key={i} />)
             ) : (

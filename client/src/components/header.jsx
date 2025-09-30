@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -26,11 +26,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { SheetDemo } from "./sheet";
+import { _get } from "../lib/api";
+import useUI from "../contexts/UIContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [isOpenCart, setIsOpenCart] = useState(false);
   const navigate = useNavigate();
+  const [totalCartItem, setTotalCartItem] = useState(0);
+  const { nofityToTheCart } = useUI();
+
+  const fetchCartData = async () => {
+    const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
+    try {
+      const response = await _get(`cart/fetch/${loginUserID}`);
+      setTotalCartItem(response.data.data.length);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+  useEffect(() => {
+    fetchCartData();
+  }, [nofityToTheCart]);
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-black sticky top-0 w-full text-white z-50">
@@ -78,10 +95,15 @@ export default function Navbar() {
       {/* Right side: Logout (desktop) and Hamburger (mobile) */}
       <div className="flex items-center gap-4">
         {/* Logout button for desktop */}
-        <div className="hidden md:flex items-center gap-3">
-          <div onClick={() => setIsOpenCart(true)}>
-            {/* <div onClick={() => alert("hiii")}> */}
+        <div className="hidden md:flex items-center gap-8">
+          <div
+            onClick={() => setIsOpenCart(true)}
+            className="relative cursor-pointer"
+          >
             <ShoppingCart />
+            <span className="absolute -top-2 left-[11px] rounded-full text-[8px] p-[0.2rem] bg-white text-black">
+              {totalCartItem}
+            </span>
           </div>
 
           <DropdownMenu>
