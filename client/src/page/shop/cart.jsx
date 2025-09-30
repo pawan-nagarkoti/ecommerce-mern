@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { _get } from "../../lib/api";
+import { _delete, _get } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
+  const { setNotifyToTheCart } = useUI();
 
   const fetchCartData = async () => {
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
@@ -19,6 +20,19 @@ export default function Cart() {
   useEffect(() => {
     fetchCartData();
   }, []);
+
+  const handleDeleteCartItem = async (id) => {
+    try {
+      const response = await _delete(`cart/delete/${id}`);
+      if (response.status === 200) {
+        fetchCartData();
+        setNotifyToTheCart((prev) => !prev);
+        alert("Product deleted");
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
   return (
     <>
       <div className="px-5 py-4 space-y-6">
@@ -65,6 +79,7 @@ export default function Cart() {
                   <button
                     className="ml-auto p-2 rounded hover:bg-gray-100"
                     aria-label="Remove"
+                    onClick={() => handleDeleteCartItem(v._id)}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

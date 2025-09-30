@@ -23,8 +23,7 @@ export default function ProductList({ item = {} }) {
         price: price,
       });
       if (response.status === 200) {
-        console.log("bddsfs");
-        setNotifyToTheCart(true);
+        setNotifyToTheCart((prev) => !prev);
         alert("Prdocut added on cart");
       }
     } catch (e) {
