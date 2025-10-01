@@ -31,7 +31,7 @@ import useUI from "../contexts/UIContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [isOpenCart, setIsOpenCart] = useState(false);
+  const { isOpenCart, setIsOpenCart } = useUI();
   const navigate = useNavigate();
   const [totalCartItem, setTotalCartItem] = useState(0);
   const { nofityToTheCart } = useUI();
@@ -89,7 +89,7 @@ export default function Navbar() {
         <Button variant="ghost" className="!mr-0">
           Search
         </Button>
-        <SheetDemo isOpenCart={isOpenCart} setIsOpenCart={setIsOpenCart} />
+        <SheetDemo />
       </div>
 
       {/* Right side: Logout (desktop) and Hamburger (mobile) */}

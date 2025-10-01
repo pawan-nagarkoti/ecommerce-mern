@@ -12,8 +12,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Cart from "../page/shop/cart";
+import useUI from "../contexts/UIContext";
 
-export function SheetDemo({ setIsOpenCart, isOpenCart }) {
+export function SheetDemo() {
+  const { isOpenCart, setIsOpenCart } = useUI();
+
   return (
     <Sheet open={isOpenCart} onOpenChange={setIsOpenCart}>
       <SheetTrigger asChild>

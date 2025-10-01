@@ -7,6 +7,7 @@ export default function Cart() {
   const [cartData, setCartData] = useState([]);
   const { setNotifyToTheCart } = useUI();
   const navigate = useNavigate();
+  const { setIsOpenCart } = useUI();
 
   const fetchCartData = async () => {
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
@@ -139,7 +140,9 @@ export default function Cart() {
 
             <button
               className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90"
-              onClick={() => navigate("checkout")}
+              onClick={() => {
+                navigate("checkout"), setIsOpenCart(false);
+              }}
             >
               Checkout
             </button>
