@@ -22,11 +22,13 @@ const featureRoutes = require("./routes/feature.route");
 const productRoutes = require("./routes/product.route");
 const cartRoutes = require("./routes/cart.route");
 const authRoutes = require("./routes/auth.route");
+const addressRoutes = require("./routes/address.route");
 
 app.use("/feature", featureRoutes);
 app.use("/product", productRoutes);
 app.use("/cart", cartRoutes);
 app.use("/auth", authRoutes);
+app.use("/address", addressRoutes);
 
 connectToDB();
 
