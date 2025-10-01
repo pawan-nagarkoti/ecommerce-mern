@@ -34,7 +34,7 @@ export default function Address() {
         });
 
     if (response.status === 200) {
-      alert("Address Added");
+      isEditAddress ? alert("Address updated") : alert("Address Added");
       setIsAddress("");
       setIsCity("");
       setIsNotes("");
