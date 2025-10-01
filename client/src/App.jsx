@@ -7,6 +7,7 @@ import LoginPage from "./page/auth/login";
 import ShopLayout from "./page/shop/shopLayout";
 import Listing from "./page/shop/listing";
 import Home from "./page/shop/home";
+import Checkout from "./page/shop/checkout";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/shop" element={<ShopLayout />}>
         <Route path="home" element={<Home />} />
         <Route path="listing" element={<Listing />} />
+        <Route path="checkout" element={<Checkout />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
