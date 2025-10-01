@@ -71,4 +71,24 @@ const updateAddress = async (req, res) => {
   }
 };
 
-module.exports = { addAddress, fetchAddress, deleteAddress, updateAddress };
+const fetchSingleAddress = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await Address.findById(id);
+    console.log(data, id);
+    return res.status(200).json({
+      data,
+      message: "Fetch single address",
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+module.exports = {
+  addAddress,
+  fetchAddress,
+  deleteAddress,
+  updateAddress,
+  fetchSingleAddress,
+};

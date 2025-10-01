@@ -12,7 +12,7 @@ export const UIProvider = ({ children }) => {
   const [isProductId, setIsProductId] = useState(null);
   const [nofityToTheCart, setNotifyToTheCart] = useState(false);
   const [isAddressAdd, setIsAddressAdd] = useState(false); // address notify
-  const [isEditAddress, setIsEditAddress] = useState(false); // notify when we edit the address
+  const [isEditAddress, setIsEditAddress] = useState(""); // notify when we edit the address
 
   return (
     <UIContext.Provider
