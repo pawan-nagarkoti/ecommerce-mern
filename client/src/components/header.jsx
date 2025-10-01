@@ -115,6 +115,7 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>
+                Logged in as
                 {JSON.parse(localStorage.getItem("loginUser"))?.userName}
               </DropdownMenuLabel>
               {/* <DropdownMenuGroup>
@@ -159,6 +160,15 @@ export default function Navbar() {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuItem disabled>API</DropdownMenuItem>
               <DropdownMenuSeparator /> */}
+              <DropdownMenuItem
+                onClick={() => {
+                  navigate("account");
+                }}
+                className="cursor-pointer"
+              >
+                Account
+                {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   localStorage.removeItem("token"), navigate("/");

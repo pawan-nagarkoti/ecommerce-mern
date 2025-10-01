@@ -14,10 +14,10 @@ export default function Checkout() {
       </div>
 
       <div className="container grid grid-cols-1 md:grid-cols-12 mt-5 p-5">
-        <div className="md:col-span-8">
+        <div className="md:col-span-6">
           <Address />
         </div>
-        <div className="md:col-span-4">
+        <div className="md:col-span-6">
           <Cart />
         </div>
       </div>
