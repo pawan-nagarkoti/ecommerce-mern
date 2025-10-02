@@ -1,5 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Address from "../page/shop/Address";
+import Order from "./order";
 
 export default function TabSection() {
   return (
@@ -10,7 +11,7 @@ export default function TabSection() {
           <TabsTrigger value="address">Address</TabsTrigger>
         </TabsList>
         <TabsContent value="order">
-          <p>order</p>
+          <Order />
         </TabsContent>
         <TabsContent value="address">
           <Address />

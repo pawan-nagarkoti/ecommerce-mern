@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { _delete, _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
   const { setNotifyToTheCart } = useUI();
   const navigate = useNavigate();
   const { setIsOpenCart } = useUI();
+  const location = useLocation();
 
   const fetchCartData = async () => {
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
@@ -141,7 +142,10 @@ export default function Cart() {
             <button
               className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90"
               onClick={() => {
-                navigate("checkout"), setIsOpenCart(false);
+                location.pathname === "/shop/checkout"
+                  ? navigate("/shop/account")
+                  : navigate("checkout");
+                setIsOpenCart(false);
               }}
             >
               Checkout
