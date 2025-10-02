@@ -55,3 +55,42 @@ export const shopByBrand = {
     { label: "H&M", icon: Heater },
   ],
 };
+
+export const orderStatusList = [
+  {
+    statusName: "Pending",
+    colorName: "gray",
+  },
+  {
+    statusName: "Processing",
+    colorName: "blue",
+  },
+  {
+    statusName: "Shipped",
+    colorName: "purple",
+  },
+  {
+    statusName: "OutForDelivery",
+    colorName: "orange",
+  },
+  {
+    statusName: "Delivered",
+    colorName: "green",
+  },
+  {
+    statusName: "Cancelled",
+    colorName: "red",
+  },
+  {
+    statusName: "Returned",
+    colorName: "amber",
+  },
+  {
+    statusName: "Refunded",
+    colorName: "teal",
+  },
+  {
+    statusName: "Failed",
+    colorName: "darkred",
+  },
+];
