@@ -13,10 +13,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function AdminLayout() {
+  const navigate = useNavigate();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -27,7 +28,12 @@ export default function AdminLayout() {
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
 
-          <Button type="button">
+          <Button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem("token"), navigate("/");
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

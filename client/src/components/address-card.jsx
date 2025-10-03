@@ -7,7 +7,12 @@ import useUI from "../contexts/UIContext";
 
 export default function AddressCard() {
   const [hasAddress, setHasAddress] = useState([]);
-  const { isAddressAdd, setIsEditAddress } = useUI();
+  const {
+    isAddressAdd,
+    setIsEditAddress,
+    isSelectedAddress,
+    setIsSelectedAddress,
+  } = useUI();
 
   const fetchAddress = async () => {
     const response = await _get("/address/get");
@@ -27,12 +32,21 @@ export default function AddressCard() {
       fetchAddress();
     }
   };
+
   return (
     <>
       {hasAddress?.data?.data?.length > 0 ? (
         <div className="grid grid-cols-2 gap-4">
           {hasAddress?.data?.data?.map((v, index) => (
-            <div className="border-1 p-5 rounded-2xl" key={index}>
+            <div
+              className="border-1 p-5 rounded-2xl cursor-pointer"
+              style={{
+                background:
+                  isSelectedAddress._id === v._id ? "#E3FCEC" : "white",
+              }}
+              key={index}
+              onClick={() => setIsSelectedAddress(v)}
+            >
               <p>Address : {v.address}</p>
               <p>City : {v.city}</p>
               <p>Pincode: {v.pincode}</p>

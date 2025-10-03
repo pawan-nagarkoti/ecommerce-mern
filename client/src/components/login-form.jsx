@@ -52,10 +52,12 @@ export function LoginForm({ className, ...props }) {
         password: loginPassword,
       });
       if (response.data.status) {
-        console.log(response.data);
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("loginUser", JSON.stringify(response.data.user));
-        navigate("/shop/home");
+
+        response.data.user.role === "admin"
+          ? navigate("/admin")
+          : navigate("/shop/home");
       }
     } catch (e) {
       console.log(e.message);

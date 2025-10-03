@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { _delete, _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -7,8 +7,9 @@ export default function Cart() {
   const [cartData, setCartData] = useState([]);
   const { setNotifyToTheCart } = useUI();
   const navigate = useNavigate();
-  const { setIsOpenCart } = useUI();
+  const { setIsOpenCart, isSelectedAddress } = useUI();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchCartData = async () => {
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
@@ -50,6 +51,50 @@ export default function Cart() {
       }
     } catch (e) {
       console.log(e.message);
+    }
+  };
+
+  const handleCheckout = async (item) => {
+    if (!isSelectedAddress) return alert("select address");
+
+    const cartItems = item.data.map((v) => ({
+      productID: v.productID._id,
+      title: v.productID.title,
+      image: v.productID.image,
+      price: v.productID.price,
+      quantity: v.quantity,
+    }));
+
+    setIsLoading(true);
+    try {
+      const userId = JSON.parse(localStorage.getItem("loginUser")).id;
+      const cartData = {
+        userId: userId,
+        cartItems: cartItems,
+        addressInfo: {
+          addressId: isSelectedAddress._id,
+          address: isSelectedAddress.address,
+          city: isSelectedAddress.city,
+          pincode: isSelectedAddress.pincode,
+          phone: isSelectedAddress.phone,
+          notes: isSelectedAddress.notes,
+        },
+        orderStatus: "Pending",
+        paymentMethod: "Credit Card",
+        paymentStatus: "Paid",
+        totalAmount: item?.totalAmount,
+        orderDate: Date.now(),
+        orderUpdateDate: Date.now(),
+      };
+
+      const res = await _post("order/add", cartData);
+      if (res.status === 200) {
+        navigate("/shop/account");
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -143,12 +188,12 @@ export default function Cart() {
               className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90"
               onClick={() => {
                 location.pathname === "/shop/checkout"
-                  ? navigate("/shop/account")
+                  ? handleCheckout(cartData?.data)
                   : navigate("checkout");
                 setIsOpenCart(false);
               }}
             >
-              Checkout
+              {isLoading ? "Loading..." : "Checkout"}
             </button>
           </>
         )}

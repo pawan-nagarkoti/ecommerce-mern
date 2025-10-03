@@ -15,6 +15,7 @@ export const UIProvider = ({ children }) => {
   const [isEditAddress, setIsEditAddress] = useState(""); // notify when we edit the
   const [isOpenCart, setIsOpenCart] = useState(false);
   const [isDiloagModalOpen, setIsDiloagModalOpen] = useState(false);
+  const [isSelectedAddress, setIsSelectedAddress] = useState("");
 
   return (
     <UIContext.Provider
@@ -41,6 +42,8 @@ export const UIProvider = ({ children }) => {
         setIsOpenCart,
         isDiloagModalOpen,
         setIsDiloagModalOpen,
+        isSelectedAddress,
+        setIsSelectedAddress,
       }}
     >
       {children}
