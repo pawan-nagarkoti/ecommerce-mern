@@ -9,6 +9,7 @@ import Listing from "./page/shop/listing";
 import Home from "./page/shop/home";
 import Checkout from "./page/shop/checkout";
 import Account from "./page/shop/account";
+import SearchProduct from "./page/shop/search";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
         <Route path="listing" element={<Listing />} />
         <Route path="checkout" element={<Checkout />} />
         <Route path="account" element={<Account />} />
+        <Route path="search" element={<SearchProduct />} />
       </Route>
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />

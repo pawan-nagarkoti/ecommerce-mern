@@ -21,7 +21,7 @@ const searchProduct = async (req, res) => {
 
     const searchResult = await Product.find(createSearchQuery);
 
-    res.status(200).json({
+    return res.status(200).json({
       data: searchResult,
       message: "product found",
     });

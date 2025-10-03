@@ -86,7 +86,11 @@ export default function Navbar() {
         <Button variant="ghost" className="!mr-0">
           Accessories
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0"
+          onClick={() => navigate("/shop/search")}
+        >
           Search
         </Button>
         <SheetDemo />
