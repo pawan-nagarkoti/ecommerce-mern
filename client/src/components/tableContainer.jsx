@@ -11,11 +11,12 @@ import { Button } from "@/components/ui/button";
 import { orderStatusList } from "../lib/constant";
 import DialogContainer from "./dilog-container";
 import useUI from "../contexts/UIContext";
-import React from "react";
+import React, { useState } from "react";
 import OrderModal from "./order-modal";
 
-export default function TableContainer({ item }) {
+export default function TableContainer({ item = [] }) {
   const { isDiloagModalOpen, setIsDiloagModalOpen } = useUI();
+  const [orderId, setOrderId] = useState("");
   return (
     <Table>
       <TableCaption></TableCaption>
@@ -59,15 +60,21 @@ export default function TableContainer({ item }) {
             </TableCell>
             <TableCell className="text-center">${v.totalAmount}</TableCell>
             <TableCell className="text-center">
-              <Button onClick={() => setIsDiloagModalOpen(true)}>
+              <Button
+                onClick={() => {
+                  setIsDiloagModalOpen(true), setOrderId(v._id);
+                }}
+              >
                 view detail
               </Button>
-              <DialogContainer>
-                <OrderModal />
-              </DialogContainer>
             </TableCell>
           </TableRow>
         ))}
+        {orderId && (
+          <DialogContainer>
+            <OrderModal orderId={orderId} />
+          </DialogContainer>
+        )}
       </TableBody>
     </Table>
   );

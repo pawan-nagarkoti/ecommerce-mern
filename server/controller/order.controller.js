@@ -76,8 +76,24 @@ const updateOrder = async (req, res) => {
   }
 };
 
+const fetchSingleOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const singleOrder = await Order.findById(id);
+    return res.status(200).json({
+      success: true,
+      data: singleOrder,
+      message: "order fatched",
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
 module.exports = {
   addOrder,
   fetchOrder,
   updateOrder,
+  fetchSingleOrder,
 };

@@ -30,7 +30,7 @@ export default function Order() {
       {isLoading ? (
         <LoaderIcon />
       ) : isOrderData?.data?.data?.length > 0 ? (
-        <TableContainer item={isOrderData.data.data} />
+        <TableContainer item={isOrderData?.data?.data} />
       ) : (
         <p>Order list not found</p>
       )}

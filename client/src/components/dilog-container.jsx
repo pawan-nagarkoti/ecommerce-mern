@@ -20,7 +20,7 @@ export default function DialogContainer({ children }) {
         <DialogTrigger></DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle></DialogTitle>
+            <DialogTitle>Order Summary</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div>{children}</div>

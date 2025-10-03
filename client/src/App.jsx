@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./page/admin/dashboard";
-import Order from "./page/admin/order";
+import OrderContainer from "./page/admin/orderContainer";
 import Product from "./page/admin/product";
 import AdminLayout from "./page/admin/adminLayout";
 import LoginPage from "./page/auth/login";
@@ -23,7 +23,7 @@ export default function App() {
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="product" element={<Product />} />
-        <Route path="order" element={<Order />} />
+        <Route path="order" element={<OrderContainer />} />
       </Route>
 
       <Route path="/login" element={<LoginPage />} />
