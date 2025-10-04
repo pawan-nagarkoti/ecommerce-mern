@@ -1,4 +1,5 @@
 const Review = require("../models/Review");
+const Order = require("../models/Order");
 
 const addProductReview = async (req, res) => {
   try {
@@ -41,8 +42,12 @@ const fetchProductReview = async (req, res) => {
 const checkValidUserForReview = async (req, res) => {
   try {
     const { userId, productId } = req.query;
-    const response = await Review.find({ userId, productId });
-    if (response.length === 0) {
+    const prductExist = await Order.exists({
+      userId: userId,
+      "cartItems.productID": productId,
+    });
+
+    if (!prductExist) {
       return res.status(200).json({
         check: false,
       });

@@ -119,43 +119,43 @@ export default function ProductDetail() {
 
             <section className="space-y-4">
               <h2 className="text-xl font-bold">Reviews</h2>
+              {hasValidUserForProductReview.check && (
+                <form className="pt-4 border-t" onSubmit={handleProductReview}>
+                  <p className="font-semibold mb-2">Write a review</p>
+                  <div className="flex gap-1 mb-3">
+                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
+                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                    </svg>
+                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
+                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                    </svg>
+                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
+                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                    </svg>
+                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
+                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                    </svg>
+                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
+                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                    </svg>
+                  </div>
+                  <textarea
+                    className="w-full rounded-md border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-slate-400"
+                    placeholder="Write a review..."
+                    value={reviewBox}
+                    onChange={(e) => setReviewBox(e.target.value)}
+                  ></textarea>
 
-              <form className="pt-4 border-t" onSubmit={handleProductReview}>
-                <p className="font-semibold mb-2">Write a review</p>
-                <div className="flex gap-1 mb-3">
-                  <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                </div>
-                <textarea
-                  className="w-full rounded-md border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-slate-400"
-                  placeholder="Write a review..."
-                  value={reviewBox}
-                  onChange={(e) => setReviewBox(e.target.value)}
-                ></textarea>
-
-                <div className="mt-3 flex justify-end">
-                  <button
-                    className="rounded-md bg-slate-900 px-4 py-2 text-white font-medium hover:bg-slate-800 transition"
-                    type="submit"
-                    disabled={hasValidUserForProductReview.check}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
+                  <div className="mt-3 flex justify-end">
+                    <button
+                      className="rounded-md bg-slate-900 px-4 py-2 text-white font-medium hover:bg-slate-800 transition"
+                      type="submit"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              )}
 
               {productReview?.data?.data?.length > 0 ? (
                 productReview?.data?.data.map((v, index) => (
