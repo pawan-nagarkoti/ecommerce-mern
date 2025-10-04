@@ -11,16 +11,20 @@ import {
 import useUI from "../contexts/UIContext";
 import { Button } from "@/components/ui/button";
 
-export default function DialogContainer({ children }) {
+export default function DialogContainer({
+  children,
+  title = "",
+  customWidth = "",
+}) {
   const { isDiloagModalOpen, setIsDiloagModalOpen } = useUI();
 
   return (
     <>
       <Dialog open={isDiloagModalOpen} onOpenChange={setIsDiloagModalOpen}>
         <DialogTrigger></DialogTrigger>
-        <DialogContent>
+        <DialogContent style={{ minWidth: customWidth }}>
           <DialogHeader>
-            <DialogTitle>Order Summary</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <DialogDescription></DialogDescription>
           </DialogHeader>
           <div>{children}</div>

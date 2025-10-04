@@ -25,6 +25,7 @@ const authRoutes = require("./routes/auth.route");
 const addressRoutes = require("./routes/address.route");
 const orderRoutes = require("./routes/order.route");
 const searchRoutes = require("./routes/search.route");
+const reviewRoutes = require("./routes/review.route");
 
 app.use("/feature", featureRoutes);
 app.use("/product", productRoutes);
@@ -33,6 +34,7 @@ app.use("/auth", authRoutes);
 app.use("/address", addressRoutes);
 app.use("/order", orderRoutes);
 app.use("/search", searchRoutes);
+app.use("/review", reviewRoutes);
 
 connectToDB();
 

@@ -10,10 +10,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { _post } from "../lib/api";
 import useUI from "../contexts/UIContext";
+import { useState } from "react";
 
 export default function ProductList({ item = {} }) {
   const userID = JSON.parse(localStorage.getItem("loginUser")).id;
-  const { setNotifyToTheCart } = useUI();
+  const { setNotifyToTheCart, setIsDiloagModalOpen, setIsProductId } = useUI();
 
   const handleAddToCart = async (price, productID) => {
     try {
@@ -33,7 +34,13 @@ export default function ProductList({ item = {} }) {
   };
   return (
     <>
-      <Card className="p-2 gap-2">
+      <Card
+        className="p-2 gap-2"
+        onClick={() => {
+          setIsDiloagModalOpen(true);
+          setIsProductId(item._id);
+        }}
+      >
         <CardHeader className="p-0 gap-0">
           <img src={item.image} alt="" className="w-full h-[200px]" />
           <CardTitle></CardTitle>
@@ -50,8 +57,11 @@ export default function ProductList({ item = {} }) {
         </CardContent>
         <CardFooter className=" p-0">
           <Button
+            type="button"
             className="w-full"
-            onClick={() => handleAddToCart(item.price, item._id)}
+            onClick={(e) => {
+              e.stopPropagation(), handleAddToCart(item.price, item._id);
+            }}
           >
             Add to cart
           </Button>

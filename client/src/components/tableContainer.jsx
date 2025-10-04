@@ -71,7 +71,7 @@ export default function TableContainer({ item = [] }) {
           </TableRow>
         ))}
         {orderId && (
-          <DialogContainer>
+          <DialogContainer title="Order Summary">
             <OrderModal orderId={orderId} />
           </DialogContainer>
         )}
