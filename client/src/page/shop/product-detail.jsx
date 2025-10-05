@@ -10,6 +10,12 @@ export default function ProductDetail() {
   const loginUserDetail = JSON.parse(localStorage.getItem("loginUser"));
   const [hasValidUserForProductReview, setHasValidUserForProductReview] =
     useState("");
+
+  const star = [1, 2, 3, 4, 5];
+  const [starValue, setStarValue] = useState(0);
+  const [howManyTimesClickedFirstStar, setHowManyTimesClickedFirstStar] =
+    useState(0);
+
   const fetchSingleProduct = async () => {
     const res = await _get(`product/single?id=${isProductId}`);
     if (res.status === 200) {
@@ -45,11 +51,13 @@ export default function ProductDetail() {
         productId: isProductId,
         username: loginUserDetail.userName,
         reviewMessage: reviewBox,
-        reviewRating: 3,
+        reviewRating: starValue,
       });
       if (res.status === 200) {
         setReviewBox("");
         fetchProductReview();
+        setStarValue(0);
+        setHowManyTimesClickedFirstStar(0);
       }
     } catch (e) {
       console.log(e.message);
@@ -62,13 +70,33 @@ export default function ProductDetail() {
         `review/checkValidUser?userId=${loginUserDetail?.id}&productId=${isProductId}`
       );
       if (res.status === 200) {
-        console.log("hii", res.data);
         setHasValidUserForProductReview(res.data);
       }
     } catch (e) {
       console.log(e.message);
     }
   };
+
+  // Star logic start here
+
+  const handleStarClicked = (v) => {
+    if (v == 1) {
+      setHowManyTimesClickedFirstStar((prev) => prev + 1);
+    } else {
+      setHowManyTimesClickedFirstStar(0);
+    }
+    setStarValue(v);
+  };
+
+  useEffect(() => {
+    if (howManyTimesClickedFirstStar > 1) {
+      setStarValue(0);
+      setHowManyTimesClickedFirstStar(0);
+    }
+  }, [howManyTimesClickedFirstStar]);
+
+  // star logic end here
+
   return (
     <>
       <div className="grid grid-cols-2 h-[400px]">
@@ -91,26 +119,12 @@ export default function ProductDetail() {
 
             <div className="flex items-center gap-4">
               <p className="text-3xl font-bold">${productData?.price}</p>
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <div className="flex">
-                  <svg className="w-5 h-5 fill-yellow-400" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-5 h-5 fill-yellow-400" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-5 h-5 fill-yellow-400" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-5 h-5 fill-yellow-400" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
-                  <svg className="w-5 h-5 fill-yellow-400" viewBox="0 0 20 20">
-                    <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                  </svg>
+                 
                 </div>
                 <span className="text-sm text-slate-500">(5.00)</span>
-              </div>
+              </div> */}
             </div>
 
             <button className="w-full rounded-md bg-slate-900 py-3 text-white font-semibold hover:bg-slate-800 transition">
@@ -123,21 +137,21 @@ export default function ProductDetail() {
                 <form className="pt-4 border-t" onSubmit={handleProductReview}>
                   <p className="font-semibold mb-2">Write a review</p>
                   <div className="flex gap-1 mb-3">
-                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                    </svg>
-                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                    </svg>
-                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                    </svg>
-                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                    </svg>
-                    <svg className="w-6 h-6 fill-slate-300" viewBox="0 0 20 20">
-                      <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                    </svg>
+                    {star.map((v, index) => (
+                      <svg
+                        key={index}
+                        onClick={() => handleStarClicked(v)}
+                        viewBox="0 0 20 20"
+                        className={`w-6 h-6 cursor-pointer transition-colors duration-200 fill-current 
+            ${
+              v <= starValue
+                ? "text-yellow-400"
+                : "text-gray-300 hover:text-yellow-200"
+            }`}
+                      >
+                        <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                      </svg>
+                    ))}
                   </div>
                   <textarea
                     className="w-full rounded-md border border-slate-300 p-3 focus:outline-none focus:ring-2 focus:ring-slate-400"
@@ -166,37 +180,19 @@ export default function ProductDetail() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <p className="font-semibold">{v.username}</p>
-                        <div className="flex">
-                          <svg
-                            className="w-4 h-4 fill-yellow-400"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                          </svg>
-                          <svg
-                            className="w-4 h-4 fill-yellow-400"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                          </svg>
-                          <svg
-                            className="w-4 h-4 fill-yellow-400"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                          </svg>
-                          <svg
-                            className="w-4 h-4 fill-yellow-400"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                          </svg>
-                          <svg
-                            className="w-4 h-4 fill-yellow-400"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
-                          </svg>
+                        <div className="flex gap-1 mb-3">
+                          {star.map((starNumber, index) => (
+                            <svg
+                              key={index}
+                              viewBox="0 0 20 20"
+                              className={`w-6 h-6 transition-colors duration-200 fill-current 
+            ${
+              starNumber <= v.reviewRating ? "text-yellow-400" : "text-gray-300"
+            }`}
+                            >
+                              <path d="M10 15.27l-5.18 3.04 1.4-5.81-4.5-3.9 5.93-.5L10 2l2.35 6.1 5.93.5-4.5 3.9 1.4 5.81z" />
+                            </svg>
+                          ))}
                         </div>
                       </div>
                       <p className="text-slate-600 mt-1 text-[12px]">
