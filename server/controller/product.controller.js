@@ -38,10 +38,30 @@ const fetchProducts = async (req, res) => {
   }
 
   try {
-    const products = await Product.find(filters).sort(sort);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
+    // ✅ Count total documents (with filters)
+    const totalItems = await Product.countDocuments(category || brand);
+
+    const products = await Product.find(filters)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit);
+
+    const totalPages = Math.max(1, Math.ceil(totalItems / limit));
+
     res.status(200).json({
       success: true,
       data: products,
+      page: page,
+      limit: limit,
+      totalPages,
+      previousPage: page > 1,
+      nextPage: page < totalPages,
+      totalItems,
+      currentPageItems: products.length,
       message: "Product fetched successfully",
     });
   } catch (error) {
