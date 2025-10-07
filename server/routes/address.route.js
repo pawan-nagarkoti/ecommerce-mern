@@ -9,7 +9,7 @@ const {
 const router = express.Router();
 
 router.post("/add", addAddress);
-router.get("/get", fetchAddress);
+router.get("/get/:id", fetchAddress);
 router.delete("/delete/:id", deleteAddress);
 router.put("/update/:id", updateAddress);
 router.get("/single/:id", fetchSingleAddress);

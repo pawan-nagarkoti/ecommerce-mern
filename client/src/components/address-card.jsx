@@ -9,6 +9,8 @@ import LoadingSpinner from "./loding";
 export default function AddressCard({ howManyAddressShow }) {
   const [hasAddress, setHasAddress] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
+
   const {
     isAddressAdd,
     setIsEditAddress,
@@ -19,7 +21,7 @@ export default function AddressCard({ howManyAddressShow }) {
   const fetchAddress = async () => {
     setIsLoading(true);
     try {
-      const response = await _get("/address/get");
+      const response = await _get(`/address/get/${userId}`);
       if (response.status === 200) {
         setHasAddress(response);
       }

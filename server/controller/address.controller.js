@@ -22,7 +22,8 @@ const addAddress = async (req, res) => {
 
 const fetchAddress = async (req, res) => {
   try {
-    const fetchAddress = await Address.find({});
+    const { id } = req.params;
+    const fetchAddress = await Address.find({ userID: id });
     return res.status(200).json({
       data: fetchAddress,
       message: "Fetched address",

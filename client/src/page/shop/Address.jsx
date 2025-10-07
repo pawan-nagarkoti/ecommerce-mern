@@ -13,6 +13,7 @@ export default function Address({ howManyAddressShow }) {
   const [isPincode, setIsPincode] = useState("");
   const [isPhone, setIsPhone] = useState("");
   const [isNotes, setIsNotes] = useState("");
+  const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +27,7 @@ export default function Address({ howManyAddressShow }) {
           notes: isNotes,
         })
       : await _post(`address/add`, {
+          userID: userId,
           address: isAddress,
           city: isCity,
           pincode: isPincode,
