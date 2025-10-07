@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { _post } from "../lib/api";
 import useUI from "../contexts/UIContext";
-import { useState } from "react";
 
 export default function ProductList({ item = {} }) {
   const userID = JSON.parse(localStorage.getItem("loginUser")).id;

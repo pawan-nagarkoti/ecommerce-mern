@@ -63,7 +63,9 @@ export default function Home() {
 
           <div className="grid gird-cols-1 md:grid-cols-4 gap-5">
             {productData?.data?.length > 0 ? (
-              productData.data.map((v, i) => <ProductList item={v} key={i} />)
+              productData.data
+                .slice(0, 4)
+                .map((v, i) => <ProductList item={v} key={i} />)
             ) : (
               <p className="text-center">Product not found</p>
             )}
