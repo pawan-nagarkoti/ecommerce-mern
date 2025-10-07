@@ -18,7 +18,7 @@ export default function Listing() {
   const [totalPageCount, setTotalPageCount] = useState(1); // total page
   const [currentPage, setCurrentPage] = useState(1); // current page
   const [syncCurrentPage, setSyncCurrentPage] = useState(0); // get value when we click on pagination (always gives one less value like if  we click 2 so it gives 1 ans so on)
-  const limit = 8;
+  const limit = 6;
 
   const category = searchParams.get("category") ?? "";
   const brand = searchParams.get("brand") ?? "";
@@ -73,7 +73,7 @@ export default function Listing() {
           </div>
 
           <div className="overflow-y-auto flex-1 p-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5 my-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 my-5">
               {isLoading ? (
                 // Center the spinner and make it span the full grid width
                 <div className="col-span-full flex justify-center py-10">

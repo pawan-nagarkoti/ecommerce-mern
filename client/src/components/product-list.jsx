@@ -34,7 +34,7 @@ export default function ProductList({ item = {} }) {
   return (
     <>
       <Card
-        className="p-2 gap-2"
+        className="p-2 gap-2 border-0 shadow-none"
         onClick={() => {
           setIsDiloagModalOpen(true);
           setIsProductId(item._id);

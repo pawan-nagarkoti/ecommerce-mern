@@ -28,7 +28,9 @@ export default function ProductCard({ items }) {
       <img src={items?.image} alt="" className="w-full h-[300px] mb-3" />
       <h4 className="font-bold">{items?.title}</h4>
       <p className="text-[14px]">{items?.description}</p>
-      <div>${items?.price}</div>
+      <div className="font-bold">
+        Price <span className="text-[14px]"> ₹{Math.floor(items?.price)} </span>
+      </div>
       <div className="flex justify-between mt-3">
         <Button
           onClick={() => {
