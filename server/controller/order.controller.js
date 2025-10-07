@@ -37,7 +37,8 @@ const addOrder = async (req, res) => {
 
 const fetchOrder = async (req, res) => {
   try {
-    const fechedOrder = await Order.find({});
+    const { id } = req.params;
+    const fechedOrder = await Order.find({ userId: id });
     res.status(200).json({
       success: true,
       data: fechedOrder,

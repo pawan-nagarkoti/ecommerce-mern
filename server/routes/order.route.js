@@ -8,7 +8,7 @@ const {
 
 const router = express.Router();
 router.post("/add", addOrder);
-router.get("/fetch", fetchOrder);
+router.get("/fetch/:id", fetchOrder);
 router.put("/update/:id/:userId", updateOrder);
 router.get("/single/:id", fetchSingleOrder);
 

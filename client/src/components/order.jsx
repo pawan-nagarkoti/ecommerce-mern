@@ -8,11 +8,12 @@ import LoadingSpinner from "./loding";
 export default function Order() {
   const [isOrderData, setIsOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
 
   const fetchOrder = async () => {
     try {
       setIsLoading(true);
-      const res = await _get("order/fetch");
+      const res = await _get(`order/fetch/${userId}`);
       if (res.data.success) {
         setIsOrderData(res);
       }

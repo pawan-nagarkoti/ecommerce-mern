@@ -123,7 +123,7 @@ export default function Navbar() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>
-                Logged in as
+                Logged in as &nbsp;
                 {JSON.parse(localStorage.getItem("loginUser"))?.userName}
               </DropdownMenuLabel>
               {/* <DropdownMenuGroup>
