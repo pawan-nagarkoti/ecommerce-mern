@@ -61,7 +61,11 @@ export default function Navbar() {
 
       {/* Center: Menu Items (visible on medium+ screens) */}
       <div className="hidden md:flex space-x-3 absolute left-1/2 transform -translate-x-1/2">
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => navigate("/shop/home")}
+        >
           Home
         </Button>
         <Button
