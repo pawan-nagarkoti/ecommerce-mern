@@ -4,15 +4,11 @@ import FilterTag from "../../components/filterTag";
 import ProductList from "../../components/product-list";
 import { shopByBrand, shopByCategory } from "../../lib/constant";
 import { _get } from "../../lib/api";
-import DialogContainer from "../../components/dilog-container";
-import useUI from "../../contexts/UIContext";
-import ProductDetail from "./product-detail";
 import LoadingSpinner from "../../components/loding";
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [productData, setProductData] = useState([]);
-  const { setIsDiloagModalOpen, isDiloagModalOpen } = useUI();
   const [isFeatureLoading, setIsFeatureLoading] = useState(false);
   const [isProductLoading, setIsProductLoading] = useState(false);
 
@@ -85,12 +81,6 @@ export default function Home() {
             </div>
           )}
         </div>
-
-        {isDiloagModalOpen && (
-          <DialogContainer title="Product Detail" customWidth="900px">
-            <ProductDetail />
-          </DialogContainer>
-        )}
       </div>
     </>
   );

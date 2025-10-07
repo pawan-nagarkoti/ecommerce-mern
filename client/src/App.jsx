@@ -10,25 +10,38 @@ import Home from "./page/shop/home";
 import Checkout from "./page/shop/checkout";
 import Account from "./page/shop/account";
 import SearchProduct from "./page/shop/search";
+import useUI from "./contexts/UIContext";
+import DialogContainer from "./components/dilog-container";
+import ProductDetail from "./page/shop/product-detail";
 
 export default function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/shop" element={<ShopLayout />}>
-        <Route path="home" element={<Home />} />
-        <Route path="listing" element={<Listing />} />
-        <Route path="checkout" element={<Checkout />} />
-        <Route path="account" element={<Account />} />
-        <Route path="search" element={<SearchProduct />} />
-      </Route>
-      <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="product" element={<Product />} />
-        <Route path="order" element={<OrderContainer />} />
-      </Route>
+  const { setIsDiloagModalOpen, isDiloagModalOpen } = useUI();
 
-      <Route path="/login" element={<LoginPage />} />
-    </Routes>
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/shop" element={<ShopLayout />}>
+          <Route path="home" element={<Home />} />
+          <Route path="listing" element={<Listing />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="account" element={<Account />} />
+          <Route path="search" element={<SearchProduct />} />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="product" element={<Product />} />
+          <Route path="order" element={<OrderContainer />} />
+        </Route>
+
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+
+      {isDiloagModalOpen && (
+        <DialogContainer title="Product Detail" customWidth="900px">
+          <ProductDetail />
+        </DialogContainer>
+      )}
+    </>
   );
 }
