@@ -1,16 +1,13 @@
 import React from "react";
 import Cart from "./cart";
 import Address from "./Address";
+import { addressImg } from "../../assets";
 
 export default function Checkout() {
   return (
     <>
       <div>
-        <img
-          src="https://picsum.photos/200/300"
-          alt=""
-          className="w-screen h-[300px]"
-        />
+        <img src={addressImg} alt="" className="w-screen h-[400px]" />
       </div>
 
       <div className="container grid grid-cols-1 md:grid-cols-12 mt-5 p-5">

@@ -48,7 +48,7 @@ export default function ProductList({ item = {} }) {
         </CardHeader>
         <CardContent className="px-3">
           <p className="font-semibold">{item.title}</p>
-          <p className="text-justify h-[100px]">
+          <p className="text-justify h-[100px] mt-2">
             {item.description.slice(0, 100)}..
           </p>
           <div className="flex justify-between items-center">

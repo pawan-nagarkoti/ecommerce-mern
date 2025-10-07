@@ -3,6 +3,7 @@ import Table from "./tableContainer";
 import TableContainer from "./tableContainer";
 import { _get } from "../lib/api";
 import { LoaderIcon } from "lucide-react";
+import LoadingSpinner from "./loding";
 
 export default function Order() {
   const [isOrderData, setIsOrderData] = useState([]);
@@ -28,7 +29,7 @@ export default function Order() {
     <>
       <p className="font-extrabold my-5">Order History</p>
       {isLoading ? (
-        <LoaderIcon />
+        <LoadingSpinner />
       ) : isOrderData?.data?.data?.length > 0 ? (
         <TableContainer item={isOrderData?.data?.data} />
       ) : (

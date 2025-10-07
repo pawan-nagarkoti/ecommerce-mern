@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { _post } from "../lib/api";
+import { loginImg } from "../assets";
 
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
@@ -83,7 +84,7 @@ export function LoginForm({ className, ...props }) {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="m@example.com"
+                      placeholder="enter email address"
                       required
                       onChange={(e) => setLoginEmail(e.target.value)}
                     />
@@ -103,10 +104,11 @@ export function LoginForm({ className, ...props }) {
                       type="password"
                       required
                       className="mb-5"
+                      placeholder="enter password"
                       onChange={(e) => setLoginPassword(e.target.value)}
                     />
                   </div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full cursor-pointer ">
                     {isLoginLoading ? "Loading..." : "Login"}
                   </Button>
                 </form>
@@ -121,6 +123,7 @@ export function LoginForm({ className, ...props }) {
                       type="text"
                       required
                       className="mb-5"
+                      placeholder="enter usename"
                       onChange={(e) => setUsername(e.target.value)}
                     />
                   </div>
@@ -130,6 +133,7 @@ export function LoginForm({ className, ...props }) {
                       id="email"
                       type="email"
                       required
+                      placeholder="enter email"
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
@@ -142,11 +146,12 @@ export function LoginForm({ className, ...props }) {
                       type="password"
                       required
                       className="mb-5"
+                      placeholder="enter password"
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
 
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full cursor-pointer">
                     {isRegisterLoading ? "Loading..." : "Sign up"}
                   </Button>
                 </form>
@@ -190,7 +195,7 @@ export function LoginForm({ className, ...props }) {
                 {isToggle ? "I have an account" : `Don't have an account`}{" "}
                 &nbsp;
                 <button
-                  className="underline underline-offset-4"
+                  className="underline underline-offset-4 cursor-pointer"
                   type="button"
                   onClick={() => setIsToggle((prev) => !prev)}
                 >
@@ -201,9 +206,9 @@ export function LoginForm({ className, ...props }) {
           </div>
           <div className="bg-muted relative hidden md:block">
             <img
-              src="https://picsum.photos/200/300"
+              src={loginImg}
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full  dark:brightness-[0.2] dark:grayscale"
             />
           </div>
         </CardContent>

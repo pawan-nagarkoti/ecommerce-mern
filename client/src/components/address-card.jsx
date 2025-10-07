@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { _delete, _get } from "../lib/api";
 import { useState } from "react";
 import useUI from "../contexts/UIContext";
+import LoadingSpinner from "./loding";
 
 export default function AddressCard({ howManyAddressShow }) {
   const [hasAddress, setHasAddress] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     isAddressAdd,
     setIsEditAddress,
@@ -15,9 +17,16 @@ export default function AddressCard({ howManyAddressShow }) {
   } = useUI();
 
   const fetchAddress = async () => {
-    const response = await _get("/address/get");
-    if (response.status === 200) {
-      setHasAddress(response);
+    setIsLoading(true);
+    try {
+      const response = await _get("/address/get");
+      if (response.status === 200) {
+        setHasAddress(response);
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -35,7 +44,9 @@ export default function AddressCard({ howManyAddressShow }) {
 
   return (
     <>
-      {hasAddress?.data?.data?.length > 0 ? (
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : hasAddress?.data?.data?.length > 0 ? (
         <div className="grid grid-cols-2 gap-4">
           {hasAddress?.data?.data
             ?.slice(0, howManyAddressShow)

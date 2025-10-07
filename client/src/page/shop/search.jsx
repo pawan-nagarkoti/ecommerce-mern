@@ -5,6 +5,7 @@ import { _get } from "../../lib/api";
 import { LoaderIcon } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import ProductList from "../../components/product-list";
+import LoadingSpinner from "../../components/loding";
 
 export default function SearchProduct() {
   const [isProductSearch, setIsProductSearch] = useState("");
@@ -50,7 +51,7 @@ export default function SearchProduct() {
         />
 
         {isLoading ? (
-          <LoaderIcon />
+          <LoadingSpinner />
         ) : productData?.data?.data.length > 0 && isProductSearch ? (
           <div className="mt-5 grid grid-cols-4 gap-5">
             {productData?.data?.data?.map((v, index) => (
