@@ -11,6 +11,8 @@ export default function ProductDetail() {
   const [hasValidUserForProductReview, setHasValidUserForProductReview] =
     useState("");
 
+  const { setNotifyToTheCart } = useUI();
+
   const star = [1, 2, 3, 4, 5];
   const [starValue, setStarValue] = useState(0);
   const [howManyTimesClickedFirstStar, setHowManyTimesClickedFirstStar] =
@@ -97,6 +99,23 @@ export default function ProductDetail() {
 
   // star logic end here
 
+  const handleAddToCart = async (price, productID) => {
+    try {
+      const response = await _post("cart/add", {
+        userID: loginUserDetail.id,
+        productID: productID,
+        price: price,
+      });
+      if (response.status === 200) {
+        setNotifyToTheCart((prev) => !prev);
+        alert("Prdocut added on cart");
+      }
+    } catch (e) {
+      console.log(e.message);
+      alert(e.response.data.message);
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 h-[400px]">
@@ -127,7 +146,13 @@ export default function ProductDetail() {
               </div> */}
             </div>
 
-            <button className="w-full rounded-md bg-slate-900 py-3 text-white font-semibold hover:bg-slate-800 transition">
+            <button
+              className="w-full rounded-md bg-slate-900 py-3 text-white font-semibold hover:bg-slate-800 transition"
+              onClick={(e) => {
+                e.stopPropagation(),
+                  handleAddToCart(productData.price, productData._id);
+              }}
+            >
               Add to Cart
             </button>
 
