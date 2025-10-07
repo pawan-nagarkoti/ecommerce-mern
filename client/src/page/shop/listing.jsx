@@ -4,11 +4,20 @@ import TopFilterSidebar from "../../components/topFilterSidebar";
 import ProductList from "../../components/product-list";
 import { _get } from "../../lib/api";
 import { useSearchParams } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import { Loader } from "lucide-react";
 
 export default function Listing() {
   const [data, setData] = useState([]);
   const [searchParams] = useSearchParams();
   const [sortByValue, setSortByValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // pagination
+  const [totalPageCount, setTotalPageCount] = useState(1); // total page
+  const [currentPage, setCurrentPage] = useState(1); // current page
+  const [syncCurrentPage, setSyncCurrentPage] = useState(0); // get value when we click on pagination (always gives one less value like if  we click 2 so it gives 1 ans so on)
+  const limit = 8;
 
   const category = searchParams.get("category") ?? "";
   const brand = searchParams.get("brand") ?? "";
@@ -20,20 +29,29 @@ export default function Listing() {
   // fetch all products
   const fetchProduct = async () => {
     try {
+      setIsLoading(true);
       const res = await _get(
-        `product/get?category=${category}&brand=${brand}&sortBy=${sortByValue}`
+        `product/get?category=${category}&brand=${brand}&sortBy=${sortByValue}&page=${currentPage}&limit=${limit}`
       );
       if (res.data.success) {
         setData(res.data);
+        setTotalPageCount(res.data.totalPages);
       }
     } catch (e) {
       console.log(e.message);
     } finally {
+      setIsLoading(false);
     }
   };
   useEffect(() => {
     fetchProduct();
-  }, [category, brand, sortByValue]);
+  }, [category, brand, sortByValue, currentPage]);
+
+  // 🔹 Handle page click
+  const handlePageClick = (event) => {
+    setSyncCurrentPage(event.selected); // orginal value (less value always)
+    setCurrentPage(event.selected + 1); // increase value when we get
+  };
 
   return (
     <>
@@ -56,12 +74,33 @@ export default function Listing() {
           {/* Product List (scrollable) */}
           <div className="overflow-y-auto flex-1 p-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5 my-5">
-              {data?.data?.length > 0 ? (
+              {isLoading ? (
+                <Loader />
+              ) : data?.data?.length > 0 ? (
                 data.data.map((v, i) => <ProductList item={v} key={i} />)
               ) : (
                 <p className="text-center">Product not found</p>
               )}
             </div>
+            {/* pagination */}
+            <ReactPaginate
+              previousLabel={"← "}
+              nextLabel={" →"}
+              breakLabel={"..."}
+              pageCount={totalPageCount}
+              forcePage={syncCurrentPage}
+              marginPagesDisplayed={3}
+              pageRangeDisplayed={2}
+              onPageChange={handlePageClick}
+              containerClassName={"react-paginate"}
+              pageClassName={"page-item"}
+              pageLinkClassName={"page-link"}
+              previousClassName={"page-item"}
+              previousLinkClassName={"page-link"}
+              nextClassName={"page-item"}
+              nextLinkClassName={"page-link"}
+              activeClassName={"active"}
+            />
           </div>
         </div>
       </div>

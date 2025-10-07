@@ -118,3 +118,28 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Wrapper for pagination */
+.react-paginate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.react-paginate .page-item {
+  border: 0.5px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* The actual clickable link */
+.react-paginate .page-link {
+  display: block;
+  padding: 0.75rem 1.5rem;
+}
+
+.react-paginate li.active a {
+  background-color: black;
+  color: #fff;
+}
