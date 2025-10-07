@@ -7,14 +7,18 @@ import { _get } from "../../lib/api";
 import DialogContainer from "../../components/dilog-container";
 import useUI from "../../contexts/UIContext";
 import ProductDetail from "./product-detail";
+import LoadingSpinner from "../../components/loding";
 
 export default function Home() {
   const [data, setData] = useState([]);
   const [productData, setProductData] = useState([]);
   const { setIsDiloagModalOpen, isDiloagModalOpen } = useUI();
+  const [isFeatureLoading, setIsFeatureLoading] = useState(false);
+  const [isProductLoading, setIsProductLoading] = useState(false);
 
   // fetch feature image
   const fetchFeatureImage = async () => {
+    setIsFeatureLoading(true);
     try {
       const res = await _get("feature/get");
       if (res.status === 200) {
@@ -22,11 +26,14 @@ export default function Home() {
       }
     } catch (e) {
       console.log(e.message);
+    } finally {
+      setIsFeatureLoading(false);
     }
   };
 
   // fetch all products
   const fetchProduct = async () => {
+    setIsProductLoading(true);
     try {
       const res = await _get(`product/get`);
       if (res.data.success) {
@@ -35,6 +42,7 @@ export default function Home() {
     } catch (e) {
       console.log(e.message);
     } finally {
+      setIsProductLoading(false);
     }
   };
   useEffect(() => {
@@ -44,7 +52,9 @@ export default function Home() {
 
   return (
     <>
-      {data?.data?.data?.length > 0 ? (
+      {isFeatureLoading ? (
+        <LoadingSpinner />
+      ) : data?.data?.data?.length > 0 ? (
         <Slider items={data?.data?.data} />
       ) : (
         <p>No feature image found.</p>
@@ -61,15 +71,19 @@ export default function Home() {
         <div className="my-20">
           <h2 className="text-center text-2xl mb-5">Feature Products</h2>
 
-          <div className="grid gird-cols-1 md:grid-cols-4 gap-5">
-            {productData?.data?.length > 0 ? (
-              productData.data
-                .slice(0, 4)
-                .map((v, i) => <ProductList item={v} key={i} />)
-            ) : (
-              <p className="text-center">Product not found</p>
-            )}
-          </div>
+          {isProductLoading ? (
+            <LoadingSpinner />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+              {productData?.data?.length > 0 ? (
+                productData.data
+                  .slice(0, 4)
+                  .map((v, i) => <ProductList item={v} key={v.id ?? i} />)
+              ) : (
+                <p className="text-center col-span-full">Product not found</p>
+              )}
+            </div>
+          )}
         </div>
 
         {isDiloagModalOpen && (

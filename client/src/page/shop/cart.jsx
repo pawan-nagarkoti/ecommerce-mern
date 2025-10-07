@@ -2,6 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { _delete, _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 import { useLocation, useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/loding";
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
@@ -10,8 +11,12 @@ export default function Cart() {
   const { setIsOpenCart, isSelectedAddress } = useUI();
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const [hasCartDataLoading, setHasCartDataLoading] = useState(false);
+  const [hasQuantityUpdate, setHasQuantityUpdate] = useState(0);
+  const [quantityUpateLoader, setQuntityUpdateLoader] = useState(false);
 
   const fetchCartData = async () => {
+    setHasCartDataLoading(true);
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
 
     try {
@@ -19,6 +24,8 @@ export default function Cart() {
       setCartData(response);
     } catch (e) {
       console.log(e.message);
+    } finally {
+      setHasCartDataLoading(false);
     }
   };
   useEffect(() => {
@@ -39,6 +46,7 @@ export default function Cart() {
   };
 
   const handleQuantity = async (id, value, price) => {
+    setQuntityUpdateLoader(true);
     try {
       const response = await _put("cart/update", {
         id: id,
@@ -47,10 +55,12 @@ export default function Cart() {
       });
 
       if (response.status === 200) {
-        fetchCartData();
+        setHasQuantityUpdate(response.data.data);
       }
     } catch (e) {
       console.log(e.message);
+    } finally {
+      setQuntityUpdateLoader(false);
     }
   };
 
@@ -99,107 +109,124 @@ export default function Cart() {
   };
   return (
     <>
-      <div className="px-5 py-4 space-y-6">
-        {cartData?.data?.data?.length > 0 ? (
-          cartData?.data?.data?.map((v, index) => (
-            <div className="flex items-start gap-3" key={index}>
-              <img
-                src={v.productID.image}
-                alt="Kids Tshirt"
-                className="h-16 w-16 rounded-md object-cover ring-1 ring-gray-200"
-              />
+      {hasCartDataLoading ? (
+        <div className="px-5 py-10 flex justify-center">
+          <LoadingSpinner />
+        </div>
+      ) : (
+        <div className="px-5 py-4 space-y-6">
+          {cartData?.data?.data?.length > 0 ? (
+            <>
+              {cartData.data.data.map((v, index) => (
+                <div className="flex items-start gap-3" key={v._id ?? index}>
+                  <img
+                    src={v.productID?.image}
+                    alt={v.productID?.title ?? "Product image"}
+                    className="h-20 w-16 rounded-md object-cover ring-1 ring-gray-200"
+                  />
 
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="font-semibold leading-5">
-                      {v.productID.title}
-                    </p>
-                    <p className="font-extralight text-[10px]">
-                      ₹ {Math.floor(v.price)}
-                    </p>
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-semibold leading-5">
+                          {v.productID?.title}
+                        </p>
+                        <p className="font-extralight text-[10px]">
+                          ₹ {Math.floor(v.price)}
+                        </p>
+                      </div>
+                      <p className="text-sm font-medium text-gray-800">
+                        ₹ {Math.floor(v.totalPrice)}
+                      </p>
+                    </div>
+
+                    <div className="mt-2 flex items-center gap-3">
+                      <div className="inline-flex items-center rounded border border-gray-200">
+                        <button
+                          className={`px-3 py-1.5 text-lg leading-none hover:bg-gray-50 ${
+                            quantityUpateLoader
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          aria-label="Decrease"
+                          onClick={() =>
+                            handleQuantity(v._id, "decrement", v.price)
+                          }
+                          disabled={quantityUpateLoader}
+                        >
+                          −
+                        </button>
+                        <span className="px-3 text-sm select-none">
+                          {v._id === hasQuantityUpdate._id
+                            ? hasQuantityUpdate.quantity
+                            : v.quantity}
+                        </span>
+                        <button
+                          className={`px-3 py-1.5 text-lg leading-none hover:bg-gray-50 ${
+                            quantityUpateLoader
+                              ? "cursor-not-allowed"
+                              : "cursor-pointer"
+                          }`}
+                          aria-label="Increase"
+                          onClick={() =>
+                            handleQuantity(v._id, "increment", v.price)
+                          }
+                          disabled={quantityUpateLoader}
+                        >
+                          +
+                        </button>
+                      </div>
+
+                      <button
+                        className="ml-auto p-2 rounded hover:bg-gray-100"
+                        aria-label="Remove"
+                        onClick={() => handleDeleteCartItem(v._id)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="1.5"
+                            d="M3 6h18M8 6v-.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V6m-8 0h8m-9 3 1 10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-10M10 11v7m4-7v7"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-sm font-medium text-gray-800">
-                    ₹ {Math.floor(v.totalPrice)}
-                  </p>
                 </div>
+              ))}
 
-                <div className="mt-2 flex items-center gap-3">
-                  <div className="inline-flex items-center rounded border border-gray-200">
-                    <button
-                      className="px-3 py-1.5 text-lg leading-none hover:bg-gray-50"
-                      aria-label="Decrease"
-                      onClick={() =>
-                        handleQuantity(v._id, "decrement", v.price)
-                      }
-                    >
-                      −
-                    </button>
-                    <span className="px-3 text-sm select-none">
-                      {v.quantity}
-                    </span>
-                    <button
-                      className="px-3 py-1.5 text-lg leading-none hover:bg-gray-50"
-                      aria-label="Increase"
-                      onClick={() =>
-                        handleQuantity(v._id, "increment", v.price)
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-
-                  <button
-                    className="ml-auto p-2 rounded hover:bg-gray-100"
-                    aria-label="Remove"
-                    onClick={() => handleDeleteCartItem(v._id)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="1.5"
-                        d="M3 6h18M8 6v-.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V6m-8 0h8m-9 3 1 10a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-10M10 11v7m4-7v7"
-                      />
-                    </svg>
-                  </button>
-                </div>
+              <div className="flex items-center justify-between border-t pt-4">
+                <span className="font-semibold">Total</span>
+                <span className="font-semibold">
+                  ₹{Math.floor(cartData?.data?.totalAmount ?? 0)}
+                </span>
               </div>
-            </div>
-          ))
-        ) : (
-          <p>No data found</p>
-        )}
 
-        {cartData?.data?.data?.length > 0 && (
-          <>
-            <div className="flex items-center justify-between border-t pt-4">
-              <span className="font-semibold">Total</span>
-              <span className="font-semibold">
-                ₹{Math.floor(cartData?.data?.totalAmount)}
-              </span>
-            </div>
-
-            <button
-              className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90"
-              onClick={() => {
-                location.pathname === "/shop/checkout"
-                  ? handleCheckout(cartData?.data)
-                  : navigate("checkout");
-                setIsOpenCart(false);
-              }}
-            >
-              {isLoading ? "Loading..." : "Checkout"}
-            </button>
-          </>
-        )}
-      </div>
+              <button
+                className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90"
+                onClick={() => {
+                  location.pathname === "/shop/checkout"
+                    ? handleCheckout(cartData?.data)
+                    : navigate("checkout");
+                  setIsOpenCart(false);
+                }}
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading..." : "Checkout"}
+              </button>
+            </>
+          ) : (
+            <p>No data found</p>
+          )}
+        </div>
+      )}
     </>
   );
 }

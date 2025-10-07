@@ -6,6 +6,7 @@ import { _get } from "../../lib/api";
 import { useSearchParams } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { Loader } from "lucide-react";
+import LoadingSpinner from "../../components/loding";
 
 export default function Listing() {
   const [data, setData] = useState([]);
@@ -71,36 +72,45 @@ export default function Listing() {
             />
           </div>
 
-          {/* Product List (scrollable) */}
           <div className="overflow-y-auto flex-1 p-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5 my-5">
               {isLoading ? (
-                <Loader />
+                // Center the spinner and make it span the full grid width
+                <div className="col-span-full flex justify-center py-10">
+                  <LoadingSpinner />
+                </div>
               ) : data?.data?.length > 0 ? (
-                data.data.map((v, i) => <ProductList item={v} key={i} />)
+                <>
+                  {data.data.map((v, i) => (
+                    <ProductList item={v} key={v.id ?? i} />
+                  ))}
+
+                  {/* Put pagination on its own row spanning all columns */}
+                  <div className="col-span-full">
+                    <ReactPaginate
+                      previousLabel={"←"}
+                      nextLabel={"→"}
+                      breakLabel={"..."}
+                      pageCount={totalPageCount}
+                      forcePage={syncCurrentPage}
+                      marginPagesDisplayed={3}
+                      pageRangeDisplayed={2}
+                      onPageChange={handlePageClick}
+                      containerClassName={"react-paginate"}
+                      pageClassName={"page-item"}
+                      pageLinkClassName={"page-link"}
+                      previousClassName={"page-item"}
+                      previousLinkClassName={"page-link"}
+                      nextClassName={"page-item"}
+                      nextLinkClassName={"page-link"}
+                      activeClassName={"active"}
+                    />
+                  </div>
+                </>
               ) : (
-                <p className="text-center">Product not found</p>
+                <p className="text-center col-span-full">Product not found</p>
               )}
             </div>
-            {/* pagination */}
-            <ReactPaginate
-              previousLabel={"← "}
-              nextLabel={" →"}
-              breakLabel={"..."}
-              pageCount={totalPageCount}
-              forcePage={syncCurrentPage}
-              marginPagesDisplayed={3}
-              pageRangeDisplayed={2}
-              onPageChange={handlePageClick}
-              containerClassName={"react-paginate"}
-              pageClassName={"page-item"}
-              pageLinkClassName={"page-link"}
-              previousClassName={"page-item"}
-              previousLinkClassName={"page-link"}
-              nextClassName={"page-item"}
-              nextLinkClassName={"page-link"}
-              activeClassName={"active"}
-            />
           </div>
         </div>
       </div>
