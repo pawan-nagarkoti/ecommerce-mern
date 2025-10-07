@@ -115,10 +115,12 @@ export default function Cart() {
                     <p className="font-semibold leading-5">
                       {v.productID.title}
                     </p>
-                    <p className="font-extralight text-[10px]">{v.price}</p>
+                    <p className="font-extralight text-[10px]">
+                      ₹ {Math.floor(v.price)}
+                    </p>
                   </div>
                   <p className="text-sm font-medium text-gray-800">
-                    $ {v.totalPrice}
+                    ₹ {Math.floor(v.totalPrice)}
                   </p>
                 </div>
 
@@ -180,7 +182,7 @@ export default function Cart() {
             <div className="flex items-center justify-between border-t pt-4">
               <span className="font-semibold">Total</span>
               <span className="font-semibold">
-                ${cartData?.data?.totalAmount}
+                ₹{Math.floor(cartData?.data?.totalAmount)}
               </span>
             </div>
 

@@ -100,7 +100,7 @@ export default function ProductDetail() {
   return (
     <>
       <div className="grid grid-cols-2 h-[400px]">
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <img
             src={productData?.image}
             alt="Product"

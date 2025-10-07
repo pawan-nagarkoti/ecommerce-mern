@@ -28,7 +28,11 @@ export function Slider({ items = [] }) {
         {items.map((v, index) => (
           <CarouselItem key={index} className="h-[500px]">
             <div className=" h-[500px]">
-              <img src={v?.image} alt="" className="w-full overflow-hidden" />
+              <img
+                src={v?.image}
+                alt=""
+                className="w-full overflow-hidden h-full"
+              />
             </div>
           </CarouselItem>
         ))}

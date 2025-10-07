@@ -13,6 +13,7 @@ import DialogContainer from "./dilog-container";
 import useUI from "../contexts/UIContext";
 import React, { useState } from "react";
 import OrderModal from "./order-modal";
+import { formatDate } from "../lib/utils";
 
 export default function TableContainer({ item = [] }) {
   const { isDiloagModalOpen, setIsDiloagModalOpen } = useUI();
@@ -33,7 +34,9 @@ export default function TableContainer({ item = [] }) {
         {item.map((v, index) => (
           <TableRow key={index}>
             <TableCell className="text-center">{v._id}</TableCell>
-            <TableCell className="text-center">{v.orderDate}</TableCell>
+            <TableCell className="text-center">
+              {formatDate(v.orderDate)}
+            </TableCell>
             <TableCell className="text-center">
               {orderStatusList.map((c, index) => (
                 <React.Fragment key={index}>
@@ -58,7 +61,10 @@ export default function TableContainer({ item = [] }) {
                 </React.Fragment>
               ))}
             </TableCell>
-            <TableCell className="text-center">${v.totalAmount}</TableCell>
+            <TableCell className="text-center">
+              {" "}
+              ₹ {Math.floor(v.totalAmount)}
+            </TableCell>
             <TableCell className="text-center">
               <Button
                 onClick={() => {

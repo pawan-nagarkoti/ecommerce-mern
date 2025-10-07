@@ -6,7 +6,7 @@ import { _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 import { useEffect } from "react";
 
-export default function Address() {
+export default function Address({ howManyAddressShow }) {
   const { setIsAddressAdd, isEditAddress, setIsEditAddress } = useUI();
   const [isAddress, setIsAddress] = useState("");
   const [isCity, setIsCity] = useState("");
@@ -63,7 +63,7 @@ export default function Address() {
 
   return (
     <>
-      <AddressCard />
+      <AddressCard howManyAddressShow={howManyAddressShow} />
       <div className="mt-5 font-extrabold mb-5">Add New Address</div>
 
       <form onSubmit={handleSubmit}>

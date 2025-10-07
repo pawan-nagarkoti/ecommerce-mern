@@ -47,12 +47,19 @@ export default function ProductList({ item = {} }) {
           <CardAction></CardAction>
         </CardHeader>
         <CardContent className="px-3">
-          <p>{item.title}</p>
+          <p className="font-semibold">{item.title}</p>
+          <p className="text-justify h-[100px]">
+            {item.description.slice(0, 100)}..
+          </p>
           <div className="flex justify-between items-center">
             <p className="text-gray-500 text-sm">{item.category}</p>
             <p className="text-gray-500 text-sm">{item.brand}</p>
           </div>
-          <p className="mt-4">${item.price}</p>
+          <p className="mt-3 font-bold">
+            {" "}
+            Price
+            <span className="font-medium"> ₹{Math.floor(item.price)}</span>
+          </p>
         </CardContent>
         <CardFooter className=" p-0">
           <Button

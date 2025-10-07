@@ -3,6 +3,7 @@ import { _get, _put } from "../lib/api";
 import { orderStatusList } from "../lib/constant";
 import { Loader } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { formatDate } from "../lib/utils";
 
 export default function OrderModal({ orderId = "" }) {
   const [orderData, setOrderData] = useState("");
@@ -62,13 +63,13 @@ export default function OrderModal({ orderId = "" }) {
             <div className="flex items-start justify-between">
               <dt className="text-sm text-gray-600">Order Date</dt>
               <dd className="text-sm font-medium text-gray-900">
-                {orderData?.data?.data?.orderDate}
+                {formatDate(orderData?.data?.data?.orderDate)}
               </dd>
             </div>
             <div className="flex items-start justify-between">
               <dt className="text-sm text-gray-600">Order Price</dt>
               <dd className="text-sm font-medium text-gray-900">
-                $ {orderData?.data?.data?.totalAmount}
+                ₹ {Math.floor(orderData?.data?.data?.totalAmount)}
               </dd>
             </div>
             <div className="flex items-start justify-between">
@@ -135,7 +136,9 @@ export default function OrderModal({ orderId = "" }) {
                 </p>
                 <p>
                   <span className="text-gray-500">Price:</span>{" "}
-                  <span className="font-medium text-gray-900">${v.price}</span>
+                  <span className="font-medium text-gray-900">
+                    ₹ {Math.floor(v.price)}
+                  </span>
                 </p>
               </div>
             ))}
