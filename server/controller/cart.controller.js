@@ -125,6 +125,11 @@ const updateCartItem = async (req, res) => {
     switch (sign) {
       case "increment":
         const quantityIncrease = data.map((v) => v.quantity + 1);
+        if (quantityIncrease[0] >= 6) {
+          return res.status(500).json({
+            message: "more than 5 are not allowed",
+          });
+        }
 
         const cartUpdateAfterIncrement = await Cart.findByIdAndUpdate(
           id,

@@ -59,6 +59,7 @@ export default function Cart() {
       }
     } catch (e) {
       console.log(e.message);
+      alert(e.response.data.message);
     } finally {
       setQuntityUpdateLoader(false);
     }
