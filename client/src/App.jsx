@@ -15,7 +15,7 @@ import DialogContainer from "./components/dilog-container";
 import ProductDetail from "./page/shop/product-detail";
 
 export default function App() {
-  const { setIsDiloagModalOpen, isDiloagModalOpen } = useUI();
+  const { isDiloagModalOpen, isProductId } = useUI();
 
   return (
     <>
@@ -37,7 +37,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
       </Routes>
 
-      {isDiloagModalOpen && (
+      {isDiloagModalOpen && isProductId && (
         <DialogContainer title="Product Detail" customWidth="900px">
           <ProductDetail />
         </DialogContainer>
