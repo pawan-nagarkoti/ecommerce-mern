@@ -31,9 +31,20 @@ export default function Listing() {
   const fetchProduct = async () => {
     try {
       setIsLoading(true);
-      const res = await _get(
-        `product/get?category=${category}&brand=${brand}&sortBy=${sortByValue}&page=${currentPage}&limit=${limit}`
-      );
+      // const res = await _get(
+      //   `product/get?category=${category}&brand=${brand}&sortBy=${sortByValue}&page=${currentPage}&limit=${limit}`
+      // );
+
+      const res = await _get("product/get", {
+        params: {
+          category,
+          brand,
+          sortBy: sortByValue,
+          page: currentPage,
+          limit,
+        },
+      });
+
       if (res.data.success) {
         setData(res.data);
         setTotalPageCount(res.data.totalPages);

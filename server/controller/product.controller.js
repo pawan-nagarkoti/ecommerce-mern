@@ -43,7 +43,7 @@ const fetchProducts = async (req, res) => {
     const skip = (page - 1) * limit;
 
     // ✅ Count total documents (with filters)
-    const totalItems = await Product.countDocuments(category || brand);
+    const totalItems = await Product.countDocuments(filters);
 
     const products = await Product.find(filters)
       .sort(sort)
