@@ -38,11 +38,28 @@ const addOrder = async (req, res) => {
 const fetchOrder = async (req, res) => {
   try {
     const { id } = req.params;
+    if (!id)
+      return res.status(400).json({
+        message: "id is required",
+      });
     const fechedOrder = await Order.find({ userId: id });
     res.status(200).json({
       success: true,
       data: fechedOrder,
       message: "order fetch successfully !",
+    });
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+const fetchAllOrder = async (req, res) => {
+  try {
+    const response = await Order.find();
+    return res.status(200).json({
+      success: true,
+      data: response,
+      message: "all order fetched",
     });
   } catch (e) {
     console.log(e.message);
@@ -97,4 +114,5 @@ module.exports = {
   fetchOrder,
   updateOrder,
   fetchSingleOrder,
+  fetchAllOrder,
 };

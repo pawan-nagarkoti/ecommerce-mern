@@ -4,7 +4,7 @@ import Order from "../../components/order";
 export default function OrderContainer() {
   return (
     <>
-      <Order />
+      <Order admin={true} />
     </>
   );
 }

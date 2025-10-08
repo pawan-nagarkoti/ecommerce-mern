@@ -5,7 +5,7 @@ import { _get } from "../lib/api";
 import { LoaderIcon } from "lucide-react";
 import LoadingSpinner from "./loding";
 
-export default function Order() {
+export default function Order({ admin = false }) {
   const [isOrderData, setIsOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
@@ -13,7 +13,9 @@ export default function Order() {
   const fetchOrder = async () => {
     try {
       setIsLoading(true);
-      const res = await _get(`order/fetch/${userId}`);
+      const res = admin
+        ? await _get(`order/get`)
+        : await _get(`order/fetch/${userId}`);
       if (res.data.success) {
         setIsOrderData(res);
       }
