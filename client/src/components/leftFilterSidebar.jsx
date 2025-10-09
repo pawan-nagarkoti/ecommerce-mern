@@ -32,8 +32,14 @@ export default function LeftFilterSidebar() {
     getQueryList(searchParams, "brand")
   );
 
+  useEffect(() => {
+    const searchParamFromUrl = getQueryList(searchParams, "category");
+    setSelectedCategories(searchParamFromUrl);
+  }, [searchParams]);
+
   // Sync selected filters to URL
   useEffect(() => {
+    // console.log(selectedCategories);
     let updatedParams = updateQueryList(
       searchParams,
       "category",

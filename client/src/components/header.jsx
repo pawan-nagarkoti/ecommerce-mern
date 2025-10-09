@@ -24,7 +24,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { SheetDemo } from "./sheet";
 import { _get } from "../lib/api";
 import useUI from "../contexts/UIContext";
@@ -35,6 +35,8 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [totalCartItem, setTotalCartItem] = useState(0);
   const { nofityToTheCart } = useUI();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
 
   const fetchCartData = async () => {
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
@@ -48,6 +50,34 @@ export default function Navbar() {
   useEffect(() => {
     fetchCartData();
   }, [nofityToTheCart]);
+
+  // this function is used for navigate to product page with filter functionality
+  function navigateToPage(path, categoryName, name) {
+    if (location.pathname === "/shop/listing" && location.search !== "") {
+      const newParams = new URLSearchParams(searchParams);
+
+      // 1️⃣ Get existing categories (if any)
+      const currentCategories = newParams.get("category")
+        ? newParams.get("category").split(",")
+        : [];
+
+      // 2️⃣ Add if it’s not already included
+      if (!currentCategories.includes(name)) {
+        currentCategories.push(name);
+      }
+
+      // 3️⃣ Rejoin and set it back
+      newParams.set("category", currentCategories.join(","));
+
+      // 4️⃣ Update the URL
+      setSearchParams(newParams);
+    } else {
+      navigate({
+        pathname: path,
+        search: categoryName,
+      });
+    }
+  }
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-black sticky top-0 w-full text-white z-50">
@@ -75,19 +105,53 @@ export default function Navbar() {
         >
           Products
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => {
+            navigateToPage("/shop/listing", "?category=Men", "Men");
+          }}
+        >
           Men
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => {
+            navigateToPage("/shop/listing", "?category=Women", "Women");
+          }}
+        >
           Women
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => {
+            navigateToPage("/shop/listing", "?category=Kids", "Kids");
+          }}
+        >
           Kids
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => {
+            navigateToPage("/shop/listing", "?category=Footwear", "Footwear");
+          }}
+        >
           Footwear
         </Button>
-        <Button variant="ghost" className="!mr-0">
+        <Button
+          variant="ghost"
+          className="!mr-0 cursor-pointer"
+          onClick={() => {
+            navigateToPage(
+              "/shop/listing",
+              "?category=Accessories",
+              "Accessories"
+            );
+          }}
+        >
           Accessories
         </Button>
         <Button
