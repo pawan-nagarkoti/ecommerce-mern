@@ -4,6 +4,7 @@ const connectToDB = require("./database/db");
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT;
+const cookieParser = require("cookie-parser");
 
 app.use(
   cors({
@@ -17,6 +18,7 @@ app.use(
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
+app.use(cookieParser());
 
 const featureRoutes = require("./routes/feature.route");
 const productRoutes = require("./routes/product.route");

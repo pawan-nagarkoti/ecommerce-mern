@@ -100,4 +100,46 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+// refresh token
+const refreshToken = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const checkUser = await User.findOne({ email });
+
+    if (req.cookies.refreshToken) {
+      const refreshToken = req.cookies.refreshToken;
+      // verify token
+      jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        (err, decode) => {
+          if (err) {
+            // Wrong Refesh Token
+            return res.status(406).json({ message: "Unauthorized" });
+          } else {
+            // Correct token we send a new access token
+            const accessToken = jwt.sign(
+              {
+                id: checkUser._id,
+                userName: checkUser.userName,
+                role: checkUser.role,
+                email: checkUser.email,
+              },
+              process.env.ACCESS_TOKEN_SECRET,
+              {
+                expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN,
+              }
+            );
+            return res.json({ accessToken });
+          }
+        }
+      );
+    } else {
+      return res.status(406).json({ message: "Unauthorized" });
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+module.exports = { registerUser, loginUser, refreshToken };
