@@ -77,26 +77,14 @@ const loginUser = async (req, res) => {
       }
     );
 
-    res
-      .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        // sameSite: "None",
-        secure: false,
-        maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
-      })
-      .json({
-        status: true,
-        message: "Login successfully",
-        accessToken,
-        user: {
-          email: checkUser.email,
-          role: checkUser.role,
-          id: checkUser._id,
-          userName: checkUser.userName,
-        },
-      });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      // sameSite: "None",
+      secure: false,
+      // maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+    });
 
-    res.status(200).json({
+    return res.status(200).json({
       status: true,
       message: "Login successfully",
       accessToken,
