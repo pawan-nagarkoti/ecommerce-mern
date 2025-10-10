@@ -77,12 +77,24 @@ const loginUser = async (req, res) => {
       }
     );
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      // sameSite: "None",
-      secure: false,
-      // maxAge: 24 * 60 * 60 * 1000,
-    });
+    res
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        // sameSite: "None",
+        secure: false,
+        maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+      })
+      .json({
+        status: true,
+        message: "Login successfully",
+        accessToken,
+        user: {
+          email: checkUser.email,
+          role: checkUser.role,
+          id: checkUser._id,
+          userName: checkUser.userName,
+        },
+      });
 
     res.status(200).json({
       status: true,
@@ -108,6 +120,7 @@ const refreshToken = async (req, res) => {
 
     if (req.cookies.refreshToken) {
       const refreshToken = req.cookies.refreshToken;
+      console.log(req.cookies);
       // verify token
       jwt.verify(
         refreshToken,
@@ -142,4 +155,46 @@ const refreshToken = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, refreshToken };
+// logout
+const logoutUser = async (req, res) => {
+  res.clearCookie("refreshToken").json({
+    success: true,
+    message: "Logged out successfully!",
+  });
+};
+
+// auth middleware
+const authMiddleware = async (req, res) => {
+  // Prefer Authorization header; optional cookie fallback if you store it there
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.slice(7)
+    : req.cookies?.accessToken; // only if you set one
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: "Unauthorized" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    req.user = decoded; // e.g. { id, role, userName, email }
+    return next();
+  } catch (err) {
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ success: false, message: "Access token expired" });
+    }
+    return res
+      .status(401)
+      .json({ success: false, message: "Invalid access token" });
+  }
+};
+
+// this is example how we can use authmiddleware and get data from that autheraization token which we are sending from frontent level
+// app.get("/api/user/profile", authMiddleware, (req, res) => {
+//   console.log(req.user); // 👈 decoded data from token
+//   res.json({ message: "Profile data", user: req.user });
+// });
+
+module.exports = { registerUser, loginUser, refreshToken, logoutUser };
