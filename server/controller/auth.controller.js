@@ -56,21 +56,38 @@ const loginUser = async (req, res) => {
     }
 
     // create jwt token
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       {
         id: checkUser._id,
         userName: checkUser.userName,
         role: checkUser.role,
         email: checkUser.email,
       },
-      "CLIENT_SECRET_KEY",
-      { expiresIn: "60m" }
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN }
     );
+
+    const refreshToken = jwt.sign(
+      {
+        id: checkUser._id,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+      }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      // sameSite: "None",
+      secure: false,
+      // maxAge: 24 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({
       status: true,
       message: "Login successfully",
-      accessToken: token,
+      accessToken,
       user: {
         email: checkUser.email,
         role: checkUser.role,
