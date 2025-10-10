@@ -197,4 +197,17 @@ const authMiddleware = async (req, res) => {
 //   res.json({ message: "Profile data", user: req.user });
 // });
 
-module.exports = { registerUser, loginUser, refreshToken, logoutUser };
+// You can use it in three ways, depending on your needs:
+
+// Level	Example	Description
+// Route level	router.get("/profile", authMiddleware, handler)	Protects one route
+// Router level	router.use(authMiddleware)	Protects all routes in that router
+// App level	app.use(authMiddleware)	Protects the whole app (rarely used for all routes)
+
+module.exports = {
+  registerUser,
+  loginUser,
+  refreshToken,
+  logoutUser,
+  authMiddleware,
+};
