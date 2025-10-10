@@ -8,9 +8,5 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.0"
-  },
-  "dependencies": {
-    "cookie-parser": "^1.4.7",
-    "cookieparser": "^0.1.0"
   }
 }
