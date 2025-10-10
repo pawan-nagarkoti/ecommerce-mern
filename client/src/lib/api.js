@@ -4,6 +4,8 @@ import { apiUrl } from "./constant";
 // Create an Axios instance
 const apiClient = axios.create({
   baseURL: apiUrl,
+  // credentials: "include", --> with Fetch;
+  // withCredentials: true --> with axios
 });
 
 // Define common API methods
