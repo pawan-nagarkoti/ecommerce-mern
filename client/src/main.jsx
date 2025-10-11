@@ -6,11 +6,11 @@ import { BrowserRouter } from "react-router-dom";
 import { UIProvider } from "./contexts/UIContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <UIProvider>
-        <App />
-      </UIProvider>
-    </BrowserRouter>
-  </StrictMode>
+  // <StrictMode>
+  <BrowserRouter>
+    <UIProvider>
+      <App />
+    </UIProvider>
+  </BrowserRouter>
+  // </StrictMode>
 );

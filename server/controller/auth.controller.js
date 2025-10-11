@@ -103,28 +103,25 @@ const loginUser = async (req, res) => {
 // refresh token
 const refreshToken = async (req, res) => {
   try {
-    const { email } = req.body;
-    const checkUser = await User.findOne({ email });
-
     if (req.cookies.refreshToken) {
       const refreshToken = req.cookies.refreshToken;
-      console.log(req.cookies);
       // verify token
       jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
-        (err, decode) => {
+        async (err, decode) => {
           if (err) {
             // Wrong Refesh Token
             return res.status(406).json({ message: "Unauthorized" });
           } else {
+            const user = await User.findOne({ _id: decode.id });
             // Correct token we send a new access token
             const accessToken = jwt.sign(
               {
-                id: checkUser._id,
-                userName: checkUser.userName,
-                role: checkUser.role,
-                email: checkUser.email,
+                id: user._id,
+                userName: user.userName,
+                role: user.role,
+                email: user.email,
               },
               process.env.ACCESS_TOKEN_SECRET,
               {
@@ -152,19 +149,17 @@ const logoutUser = async (req, res) => {
 };
 
 // auth middleware
-const authMiddleware = async (req, res) => {
-  // Prefer Authorization header; optional cookie fallback if you store it there
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ")
-    ? authHeader.slice(7)
-    : req.cookies?.accessToken; // only if you set one
-
-  if (!token) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
-  }
-
+const authMiddleware = async (req, res, next) => {
   try {
+    const authHeader = req.headers.authorization || "";
+    const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+
+    if (!token) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
     req.user = decoded; // e.g. { id, role, userName, email }
     return next();
   } catch (err) {
@@ -173,9 +168,12 @@ const authMiddleware = async (req, res) => {
         .status(401)
         .json({ success: false, message: "Access token expired" });
     }
-    return res
-      .status(401)
-      .json({ success: false, message: "Invalid access token" });
+    if (err.name === "JsonWebTokenError" || err.name === "NotBeforeError") {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid access token" });
+    }
+    return next(err);
   }
 };
 
