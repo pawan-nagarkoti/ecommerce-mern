@@ -34,7 +34,7 @@ const { authorize } = require("./middlewares/auth.middleware");
 
 app.use("/auth", authRoutes);
 app.use("/feature", authMiddleware, featureRoutes);
-app.use("/product", authMiddleware, authorize("admin"), productRoutes);
+app.use("/product", authMiddleware, productRoutes);
 app.use("/cart", authMiddleware, authorize("admin", "user"), cartRoutes);
 app.use("/address", authMiddleware, authorize("admin", "user"), addressRoutes);
 app.use("/order", authMiddleware, orderRoutes);

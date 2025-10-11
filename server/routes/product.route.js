@@ -8,14 +8,20 @@ const {
   fetchSingleProduct,
 } = require("../controller/product.controller");
 const upload = require("../middlewares/multer.middleware");
+const { authorize } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
 
-router.get("/get", fetchProducts);
-router.post("/add", upload.single("image"), addProducts);
-router.delete("/delete-all", deleteAllProducts);
-router.delete("/delete", deleteProduct);
-router.put("/update", upload.single("image"), updateProducts);
-router.get("/single", fetchSingleProduct);
+router.get("/get", authorize("user", "admin"), fetchProducts);
+router.post("/add", upload.single("image"), authorize("admin"), addProducts);
+router.delete("/delete-all", authorize("admin"), deleteAllProducts);
+router.delete("/delete", authorize("admin"), deleteProduct);
+router.put(
+  "/update",
+  upload.single("image"),
+  authorize("admin"),
+  updateProducts
+);
+router.get("/single", authorize("admin", "user"), fetchSingleProduct);
 
 module.exports = router;
