@@ -142,7 +142,10 @@ const refreshToken = async (req, res) => {
 
 // logout
 const logoutUser = async (req, res) => {
-  res.clearCookie("refreshToken").json({
+  if (!req.cookies.refreshToken) {
+    return res.status(401).json({ success: false, message: "Not logged in" });
+  }
+  return res.clearCookie("refreshToken").json({
     success: true,
     message: "Logged out successfully!",
   });

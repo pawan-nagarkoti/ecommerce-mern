@@ -15,9 +15,10 @@ import {
 } from "@/components/ui/sidebar";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import useLogout from "../../hooks/useLogout";
 
 export default function AdminLayout() {
-  const navigate = useNavigate();
+  const logout = useLogout();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -28,12 +29,8 @@ export default function AdminLayout() {
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
 
-          <Button
-            type="button"
-            onClick={() => {
-              localStorage.removeItem("token"), navigate("/");
-            }}
-          >
+          <button onClick={logout}>logout</button>
+          <Button type="button" onClick={logout}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

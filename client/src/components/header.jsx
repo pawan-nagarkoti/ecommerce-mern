@@ -28,6 +28,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { SheetDemo } from "./sheet";
 import { _get } from "../lib/api";
 import useUI from "../contexts/UIContext";
+import useLogout from "../hooks/useLogout";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -37,6 +38,7 @@ export default function Navbar() {
   const { nofityToTheCart } = useUI();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
+  const logout = useLogout();
 
   const fetchCartData = async () => {
     const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
@@ -241,12 +243,7 @@ export default function Navbar() {
                 Account
                 {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
               </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  localStorage.removeItem("token"), navigate("/");
-                }}
-                className="cursor-pointer"
-              >
+              <DropdownMenuItem onClick={logout} className="cursor-pointer">
                 Log out
                 {/* <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut> */}
               </DropdownMenuItem>
@@ -283,9 +280,7 @@ export default function Navbar() {
                   type="button"
                   variant="outline"
                   className="flex items-center gap-2 w-full"
-                  onClick={() => {
-                    localStorage.removeItem("token"), navigate("/");
-                  }}
+                  onClick={logout}
                 >
                   <LogOut className="w-4 h-4" />
                   Logout
