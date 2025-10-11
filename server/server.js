@@ -29,15 +29,16 @@ const addressRoutes = require("./routes/address.route");
 const orderRoutes = require("./routes/order.route");
 const searchRoutes = require("./routes/search.route");
 const reviewRoutes = require("./routes/review.route");
+const { authMiddleware } = require("./controller/auth.controller");
 
 app.use("/auth", authRoutes);
-app.use("/feature", featureRoutes);
-app.use("/product", productRoutes);
-app.use("/cart", cartRoutes);
-app.use("/address", addressRoutes);
-app.use("/order", orderRoutes);
-app.use("/search", searchRoutes);
-app.use("/review", reviewRoutes);
+app.use("/feature", authMiddleware, featureRoutes);
+app.use("/product", authMiddleware, productRoutes);
+app.use("/cart", authMiddleware, cartRoutes);
+app.use("/address", authMiddleware, addressRoutes);
+app.use("/order", authMiddleware, orderRoutes);
+app.use("/search", authMiddleware, searchRoutes);
+app.use("/review", authMiddleware, reviewRoutes);
 
 connectToDB();
 
