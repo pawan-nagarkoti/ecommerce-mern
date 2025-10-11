@@ -30,15 +30,16 @@ const orderRoutes = require("./routes/order.route");
 const searchRoutes = require("./routes/search.route");
 const reviewRoutes = require("./routes/review.route");
 const { authMiddleware } = require("./controller/auth.controller");
+const { authorize } = require("./middlewares/auth.middleware");
 
 app.use("/auth", authRoutes);
 app.use("/feature", authMiddleware, featureRoutes);
-app.use("/product", authMiddleware, productRoutes);
-app.use("/cart", authMiddleware, cartRoutes);
-app.use("/address", authMiddleware, addressRoutes);
+app.use("/product", authMiddleware, authorize("admin"), productRoutes);
+app.use("/cart", authMiddleware, authorize("admin", "user"), cartRoutes);
+app.use("/address", authMiddleware, authorize("admin", "user"), addressRoutes);
 app.use("/order", authMiddleware, orderRoutes);
 app.use("/search", authMiddleware, searchRoutes);
-app.use("/review", authMiddleware, reviewRoutes);
+app.use("/review", authMiddleware, authorize("user"), reviewRoutes);
 
 connectToDB();
 
