@@ -29,6 +29,7 @@ import { SheetDemo } from "./sheet";
 import { _get } from "../lib/api";
 import useUI from "../contexts/UIContext";
 import useLogout from "../hooks/useLogout";
+import useCookie from "../hooks/useCookie";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -39,9 +40,10 @@ export default function Navbar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const logout = useLogout();
+  const { getCookie } = useCookie();
 
   const fetchCartData = async () => {
-    const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
+    const loginUserID = getCookie("loginUserInfo").id;
     try {
       const response = await _get(`cart/fetch/${loginUserID}`);
       setTotalCartItem(response.data.data.length);
@@ -190,7 +192,7 @@ export default function Navbar() {
             <DropdownMenuContent className="w-56" align="start">
               <DropdownMenuLabel>
                 Logged in as &nbsp;
-                {JSON.parse(localStorage.getItem("loginUser"))?.userName}
+                {getCookie("loginUserInfo")?.userName}
               </DropdownMenuLabel>
               {/* <DropdownMenuGroup>
                 <DropdownMenuItem>

@@ -10,10 +10,7 @@ import useCookie from "../hooks/useCookie";
 export default function AddressCard({ howManyAddressShow }) {
   const [hasAddress, setHasAddress] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
   const { getCookie } = useCookie();
-
-  console.log(getCookie("accessToken"));
 
   const {
     isAddressAdd,
@@ -25,7 +22,9 @@ export default function AddressCard({ howManyAddressShow }) {
   const fetchAddress = async () => {
     setIsLoading(true);
     try {
-      const response = await _get(`/address/get/${userId}`);
+      const response = await _get(
+        `/address/get/${getCookie("loginUserInfo")?.id}`
+      );
       if (response.status === 200) {
         setHasAddress(response);
       }

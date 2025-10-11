@@ -58,9 +58,7 @@ export function LoginForm({ className, ...props }) {
       if (response.data.status) {
         await setAccessToken(response.data.accessToken);
         addCookie("accessToken", response.data.accessToken);
-
-        localStorage.setItem("token", response.data.accessToken);
-        localStorage.setItem("loginUser", JSON.stringify(response.data.user));
+        addCookie("loginUserInfo", response.data.user);
 
         response.data.user.role === "admin"
           ? navigate("/admin")

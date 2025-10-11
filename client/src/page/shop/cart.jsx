@@ -3,6 +3,7 @@ import { _delete, _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/loding";
+import useCookie from "../../hooks/useCookie";
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
@@ -14,13 +15,15 @@ export default function Cart() {
   const [hasCartDataLoading, setHasCartDataLoading] = useState(false);
   const [hasQuantityUpdate, setHasQuantityUpdate] = useState(0);
   const [quantityUpateLoader, setQuntityUpdateLoader] = useState(false);
+  const { getCookie } = useCookie();
 
   const fetchCartData = async () => {
     setHasCartDataLoading(true);
-    const loginUserID = JSON.parse(localStorage.getItem("loginUser")).id;
 
     try {
-      const response = await _get(`cart/fetch/${loginUserID}`);
+      const response = await _get(
+        `cart/fetch/${getCookie("loginUserInfo").id}`
+      );
       setCartData(response);
     } catch (e) {
       console.log(e.message);
@@ -78,7 +81,7 @@ export default function Cart() {
 
     setIsLoading(true);
     try {
-      const userId = JSON.parse(localStorage.getItem("loginUser")).id;
+      const userId = getCookie("loginUserInfo")?.id;
       const cartData = {
         userId: userId,
         cartItems: cartItems,

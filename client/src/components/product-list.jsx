@@ -10,15 +10,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { _post } from "../lib/api";
 import useUI from "../contexts/UIContext";
+import useCookie from "../hooks/useCookie";
 
 export default function ProductList({ item = {} }) {
-  const userID = JSON.parse(localStorage.getItem("loginUser")).id;
   const { setNotifyToTheCart, setIsDiloagModalOpen, setIsProductId } = useUI();
+  const { getCookie } = useCookie();
 
   const handleAddToCart = async (price, productID) => {
     try {
       const response = await _post("cart/add", {
-        userID: userID,
+        userID: getCookie("userLoginInfo").id,
         productID: productID,
         price: price,
       });

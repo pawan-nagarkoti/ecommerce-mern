@@ -4,18 +4,19 @@ import TableContainer from "./tableContainer";
 import { _get } from "../lib/api";
 import { LoaderIcon } from "lucide-react";
 import LoadingSpinner from "./loding";
+import useCookie from "../hooks/useCookie";
 
 export default function Order({ admin = false }) {
   const [isOrderData, setIsOrderData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
+  const { getCookie } = useCookie();
 
   const fetchOrder = async () => {
     try {
       setIsLoading(true);
       const res = admin
         ? await _get(`order/get`)
-        : await _get(`order/fetch/${userId}`);
+        : await _get(`order/fetch/${getCookie("loginUserInfo")?.id}`);
       if (res.data.success) {
         setIsOrderData(res);
       }

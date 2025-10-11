@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import useUI from "../../contexts/UIContext";
 import { _get, _post } from "../../lib/api";
+import useCookie from "../../hooks/useCookie";
 
 export default function ProductDetail() {
   const { isProductId } = useUI();
+  const { getCookie } = useCookie();
   const [productData, setProductData] = useState("");
   const [productReview, setProductReview] = useState("");
   const [reviewBox, setReviewBox] = useState("");
-  const loginUserDetail = JSON.parse(localStorage.getItem("loginUser"));
+  const loginUserDetail = getCookie("loginUserInfo");
   const [hasValidUserForProductReview, setHasValidUserForProductReview] =
     useState("");
 
@@ -47,7 +49,6 @@ export default function ProductDetail() {
   const handleProductReview = async (e) => {
     try {
       e.preventDefault();
-      const loginUserDetail = JSON.parse(localStorage.getItem("loginUser"));
       const res = await _post("review/add", {
         userId: loginUserDetail.id,
         productId: isProductId,

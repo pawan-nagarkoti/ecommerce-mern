@@ -5,6 +5,7 @@ import { useState } from "react";
 import { _get, _post, _put } from "../../lib/api";
 import useUI from "../../contexts/UIContext";
 import { useEffect } from "react";
+import useCookie from "../../hooks/useCookie";
 
 export default function Address({ howManyAddressShow }) {
   const { setIsAddressAdd, isEditAddress, setIsEditAddress } = useUI();
@@ -13,7 +14,7 @@ export default function Address({ howManyAddressShow }) {
   const [isPincode, setIsPincode] = useState("");
   const [isPhone, setIsPhone] = useState("");
   const [isNotes, setIsNotes] = useState("");
-  const userId = JSON.parse(localStorage.getItem("loginUser"))?.id;
+  const { getCookie } = useCookie();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +28,7 @@ export default function Address({ howManyAddressShow }) {
           notes: isNotes,
         })
       : await _post(`address/add`, {
-          userID: userId,
+          userID: getCookie("loginUserInfo")?.id,
           address: isAddress,
           city: isCity,
           pincode: isPincode,
