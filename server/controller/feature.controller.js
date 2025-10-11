@@ -19,12 +19,12 @@ const addNewFeatureImage = async (req, res) => {
 // fetch all featured images
 const fetchFeaturedImages = async (req, res) => {
   try {
-    if (req.user.role !== "admin") {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized user",
-      });
-    }
+    // if (req.user.role !== "admin") {
+    //   return res.status(401).json({
+    //     success: false,
+    //     message: "Unauthorized user",
+    //   });
+    // }
     const fetchImages = await Feature.find({}).sort({ createdAt: -1 });
     res.status(200).json({
       data: fetchImages,

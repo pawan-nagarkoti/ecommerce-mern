@@ -39,7 +39,7 @@ app.use("/cart", authMiddleware, authorize("admin", "user"), cartRoutes);
 app.use("/address", authMiddleware, authorize("admin", "user"), addressRoutes);
 app.use("/order", authMiddleware, orderRoutes);
 app.use("/search", authMiddleware, searchRoutes);
-app.use("/review", authMiddleware, authorize("user"), reviewRoutes);
+app.use("/review", authMiddleware, authorize("user", "admin"), reviewRoutes);
 
 connectToDB();
 

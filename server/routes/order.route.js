@@ -9,10 +9,10 @@ const {
 const { authorize } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
-router.post("/add", authorize("admin"), addOrder);
-router.get("/fetch/:id", authorize("admin"), fetchOrder);
+router.post("/add", authorize("user"), addOrder);
+router.get("/fetch/:id", authorize("user", "admin"), fetchOrder);
 router.get("/get", fetchAllOrder);
 router.put("/update/:id/:userId", authorize("admin"), updateOrder);
-router.get("/single/:id", authorize("admin"), fetchSingleOrder);
+router.get("/single/:id", authorize("admin", "user"), fetchSingleOrder);
 
 module.exports = router;
