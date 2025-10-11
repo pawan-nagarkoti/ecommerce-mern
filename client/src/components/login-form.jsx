@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { _post, setAccessToken } from "../lib/api";
 import { loginImg } from "../assets";
+import useCookie from "../hooks/useCookie";
 
 export function LoginForm({ className, ...props }) {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ export function LoginForm({ className, ...props }) {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+  const { addCookie } = useCookie();
 
   // register user
   const handleUserRegisterForm = async (e) => {
@@ -54,6 +57,7 @@ export function LoginForm({ className, ...props }) {
       });
       if (response.data.status) {
         await setAccessToken(response.data.accessToken);
+        addCookie("accessToken", response.data.accessToken);
 
         localStorage.setItem("token", response.data.accessToken);
         localStorage.setItem("loginUser", JSON.stringify(response.data.user));

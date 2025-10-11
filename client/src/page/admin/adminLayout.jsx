@@ -29,7 +29,6 @@ export default function AdminLayout() {
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
 
-          <button onClick={logout}>logout</button>
           <Button type="button" onClick={logout}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
