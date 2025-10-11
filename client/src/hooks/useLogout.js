@@ -11,6 +11,7 @@ export default function useLogout() {
       const logoutUser = await _post("auth/logout");
       if (logoutUser?.data?.success) {
         deleteCookie("accessToken");
+        deleteCookie("loginUserInfo");
         navigate("/");
       }
     } catch (e) {
