@@ -1,10 +1,4 @@
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Dashboard from "./page/admin/dashboard";
 import OrderContainer from "./page/admin/orderContainer";
 import Product from "./page/admin/product";
@@ -20,37 +14,11 @@ import useUI from "./contexts/UIContext";
 import DialogContainer from "./components/dilog-container";
 import ProductDetail from "./page/shop/product-detail";
 import Unauthorized from "./page/unauthorized";
-import { useEffect } from "react";
-import useCookie from "./hooks/useCookie";
 import NotFound from "./page/notFound";
+import ProtectedRoute from "./components/protectedRoute";
 
 export default function App() {
   const { isDiloagModalOpen, isProductId } = useUI();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { getCookie } = useCookie();
-
-  useEffect(() => {
-    if (location.pathname === "/" && !getCookie("accessToken")) {
-      return navigate("/login");
-    }
-
-    if (
-      location.pathname === "/" &&
-      getCookie("accessToken") &&
-      getCookie("loginUserInfo").role === "admin"
-    ) {
-      return navigate("/admin");
-    }
-
-    if (
-      location.pathname === "/" &&
-      getCookie("accessToken") &&
-      getCookie("loginUserInfo").role === "user"
-    ) {
-      return navigate("/shop/home");
-    }
-  }, []);
 
   return (
     <>
@@ -59,19 +27,73 @@ export default function App() {
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         <Route path="/shop" element={<ShopLayout />}>
-          <Route index element={<Navigate to="home" replace />} />
-          <Route path="home" element={<Home />} />
-          <Route path="listing" element={<Listing />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="account" element={<Account />} />
-          <Route path="search" element={<SearchProduct />} />
+          <Route
+            path="home"
+            element={
+              <ProtectedRoute roles={["user"]}>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="listing"
+            element={
+              <ProtectedRoute roles={["user"]}>
+                <Listing />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="checkout"
+            element={
+              <ProtectedRoute roles={["user"]}>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="account"
+            element={
+              <ProtectedRoute roles={["user"]}>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="search"
+            element={
+              <ProtectedRoute roles={["user"]}>
+                <SearchProduct />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Navigate to="feature" replace />} />
-          <Route path="feature" element={<Dashboard />} />
-          <Route path="product" element={<Product />} />
-          <Route path="order" element={<OrderContainer />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="product"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <Product />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="order"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <OrderContainer />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         <Route path="*" element={<NotFound />} />

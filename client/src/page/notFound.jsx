@@ -1,7 +1,17 @@
-import useLogout from "../hooks/useLogout";
+import { useNavigate } from "react-router-dom";
+import useCookie from "../hooks/useCookie";
 
 export default function NotFound() {
-  const logout = useLogout();
+  const { getCookie } = useCookie();
+  const navigate = useNavigate();
+
+  const redirectToLoginPage = () => {
+    if (getCookie("accessToken")) {
+      navigate(-1);
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <main className="flex h-screen flex-col items-center justify-center bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 px-6 text-center">
@@ -36,14 +46,14 @@ export default function NotFound() {
       {/* Actions */}
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <button
-          onClick={logout}
+          onClick={redirectToLoginPage}
           className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
         >
           Go to Homepage
         </button>
 
         <button
-          onClick={logout}
+          onClick={redirectToLoginPage}
           className="rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-gray-900 ring-1 ring-gray-200 shadow hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 dark:bg-gray-800 dark:text-white dark:ring-gray-700 dark:hover:bg-gray-700"
         >
           Contact Support
