@@ -23,7 +23,7 @@ const data = {
       items: [
         {
           title: "Dashboard",
-          url: "/admin",
+          url: "/admin/feature",
         },
         {
           title: "Product",
