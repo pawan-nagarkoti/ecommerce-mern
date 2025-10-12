@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import useCookie from "../hooks/useCookie";
+import useLogout from "../hooks/useLogout";
 
 export default function NotFound() {
   const { getCookie } = useCookie();
   const navigate = useNavigate();
+  const logout = useLogout();
 
   const redirectToLoginPage = () => {
     if (getCookie("accessToken")) {
-      navigate(-1);
+      logout();
     } else {
       navigate("/login");
     }

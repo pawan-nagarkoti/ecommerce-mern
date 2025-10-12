@@ -7,7 +7,7 @@ export default function Unauthorized() {
 
   const redirectToLoginPage = () => {
     if (getCookie("accessToken")) {
-      navigate(-1);
+      logout();
     } else {
       navigate("/login");
     }

@@ -3,14 +3,14 @@ import { useCookies } from "react-cookie";
 export default function useCookie() {
   const [cookies, setCookie, removeCookie] = useCookies();
 
-  const getCookie = (key) => {
-    return cookies[key];
+  const getCookie = (key) => cookies[key];
+
+  const addCookie = (key, value, options = { path: "/" }) => {
+    setCookie(key, value, options);
   };
-  const addCookie = (key, value) => {
-    setCookie(key, value);
-  };
-  const deleteCookie = (value) => {
-    removeCookie(value);
+
+  const deleteCookie = (key, options = { path: "/" }) => {
+    removeCookie(key, options);
   };
 
   return {
