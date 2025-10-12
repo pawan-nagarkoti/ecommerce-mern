@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Dashboard from "./page/admin/dashboard";
 import OrderContainer from "./page/admin/orderContainer";
 import Product from "./page/admin/product";
@@ -13,14 +13,44 @@ import SearchProduct from "./page/shop/search";
 import useUI from "./contexts/UIContext";
 import DialogContainer from "./components/dilog-container";
 import ProductDetail from "./page/shop/product-detail";
+import Unauthorized from "./components/unauthorized";
+import { useEffect } from "react";
+import useCookie from "./hooks/useCookie";
 
 export default function App() {
   const { isDiloagModalOpen, isProductId } = useUI();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { getCookie } = useCookie();
+
+  useEffect(() => {
+    if (location.pathname === "/" && !getCookie("accessToken")) {
+      return navigate("/login");
+    }
+
+    if (
+      location.pathname === "/" &&
+      getCookie("accessToken") &&
+      getCookie("loginUserInfo").role === "admin"
+    ) {
+      return navigate("/admin");
+    }
+
+    if (
+      location.pathname === "/" &&
+      getCookie("accessToken") &&
+      getCookie("loginUserInfo").role === "user"
+    ) {
+      return navigate("/shop/home");
+    }
+  }, []);
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
+
         <Route path="/shop" element={<ShopLayout />}>
           <Route path="home" element={<Home />} />
           <Route path="listing" element={<Listing />} />
@@ -33,8 +63,6 @@ export default function App() {
           <Route path="product" element={<Product />} />
           <Route path="order" element={<OrderContainer />} />
         </Route>
-
-        <Route path="/login" element={<LoginPage />} />
       </Routes>
 
       {isDiloagModalOpen && isProductId && (

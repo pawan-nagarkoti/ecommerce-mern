@@ -12,7 +12,7 @@ export default function useLogout() {
       if (logoutUser?.data?.success) {
         deleteCookie("accessToken");
         deleteCookie("loginUserInfo");
-        navigate("/");
+        navigate("/login");
       }
     } catch (e) {
       console.log(e.message);
