@@ -1,6 +1,10 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { transporter } = require("../utils/mailer");
+const { generateOtp } = require("../utils/otp");
+const { otpHtmlTemplate } = require("../utils/emailTemplate");
+
 // add new user (Register)
 const registerUser = async (req, res) => {
   try {
@@ -234,6 +238,33 @@ const restPassword = async (req, res) => {
   }
 };
 
+const sendMailForOtp = async (req, res) => {
+  const otp = generateOtp(6);
+  try {
+    if (otp) {
+      await transporter.sendMail({
+        from: "pawan@gmail.com",
+        to: "user@gmail.com, test@gmail.com",
+        subject: "Testing email subject",
+        text: "Testing email text",
+        html: otpHtmlTemplate({
+          otp,
+          expiresInMinutes: 10,
+          appName: "Ecommerce application",
+        }),
+      });
+      return res.status(200).json({
+        message: "OTP sended in mail",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      message: "something is error",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -241,4 +272,5 @@ module.exports = {
   logoutUser,
   authMiddleware,
   restPassword,
+  sendMailForOtp,
 };
