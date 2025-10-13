@@ -25,7 +25,15 @@ export default function ProductCard({ items }) {
   };
   return (
     <div>
-      <img src={items?.image} alt="" className="w-full h-[300px] mb-3" />
+      <div className="relative">
+        <img src={items?.image} alt="" className="w-full h-[300px] mb-3" />
+        {items?.featureProduct && (
+          <p className="absolute top-3.5 left-3.5 bg-black/70 text-white text-sm px-2 py-1 rounded">
+            Feature Product
+          </p>
+        )}
+      </div>
+
       <h4 className="font-bold">{items?.title}</h4>
       <p className="text-[14px]">{items?.description}</p>
       <div className="font-bold">

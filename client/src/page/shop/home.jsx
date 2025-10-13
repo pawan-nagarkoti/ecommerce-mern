@@ -31,7 +31,11 @@ export default function Home() {
   const fetchProduct = async () => {
     setIsProductLoading(true);
     try {
-      const res = await _get(`product/get`);
+      const res = await _get(`product/get`, {
+        params: {
+          feature: true,
+        },
+      });
       if (res.data.success) {
         setProductData(res.data);
       }
@@ -72,11 +76,13 @@ export default function Home() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
               {productData?.data?.length > 0 ? (
-                productData.data
-                  .slice(0, 4)
-                  .map((v, i) => <ProductList item={v} key={v.id ?? i} />)
+                productData.data.map((v, i) => (
+                  <ProductList item={v} key={v.id ?? i} />
+                ))
               ) : (
-                <p className="text-center col-span-full">Product not found</p>
+                <p className="text-center col-span-full">
+                  No feature product found
+                </p>
               )}
             </div>
           )}

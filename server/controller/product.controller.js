@@ -37,6 +37,15 @@ const fetchProducts = async (req, res) => {
       break;
   }
 
+  if (req?.query?.feature) {
+    const product = await Product.find({ featureProduct: req.query.feature });
+    return res.status(200).json({
+      success: true,
+      data: product,
+      message: "fetch feature product",
+    });
+  }
+
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 5;
@@ -85,6 +94,7 @@ const addProducts = async (req, res) => {
       price: p.price,
       salePrice: p.salePrice,
       stock: p.stock,
+      featureProduct: p.featureProduct,
     };
     const newProduct = await Product.create(productObj);
 
@@ -152,6 +162,7 @@ const updateProducts = async (req, res) => {
       salePrice: up.salePrice,
       stock: up.stock,
       image: req.body.image ? req.body.image : productImage.url,
+      featureProduct: up.featureProduct,
     };
     const updatedProduct = await Product.findByIdAndUpdate(
       upID,

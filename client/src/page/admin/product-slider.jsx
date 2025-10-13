@@ -14,6 +14,7 @@ import { brand, category } from "../../lib/constant";
 import { useEffect, useState } from "react";
 import useUI from "../../contexts/UIContext";
 import { _get, _post, _put } from "../../lib/api";
+import { Switch } from "@/components/ui/switch";
 
 export default function ProductSlider() {
   const [image, setImage] = useState("");
@@ -25,6 +26,7 @@ export default function ProductSlider() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPreviewImage, setISPreviewImage] = useState("");
   const [data, setData] = useState("");
+  const [isFeatureProduct, setIsFeatureProduct] = useState(false);
 
   const {
     setCallProducts,
@@ -51,6 +53,7 @@ export default function ProductSlider() {
     v.append("stock", totalStock);
     v.append("category", categoryValue ? categoryValue : data.category);
     v.append("brand", brandValue ? brandValue : data.brand);
+    v.append("featureProduct", isFeatureProduct);
 
     try {
       setIsLoading(true);
@@ -93,6 +96,7 @@ export default function ProductSlider() {
       setSalePrice(r.salePrice ?? "");
       setTotalStock(r.stock ?? "");
       setISPreviewImage(r.image);
+      setIsFeatureProduct(r.featureProduct);
     } catch (e) {
       console.log(e.message);
     } finally {
@@ -118,6 +122,7 @@ export default function ProductSlider() {
       setIsProductId("");
       setIsOpen(false);
       setHasEditProductBtnClicked(false);
+      setIsFeatureProduct(false);
     }
   }, [isOpen]);
 
@@ -223,8 +228,22 @@ export default function ProductSlider() {
                 onChange={(e) => setTotalStock(e.target.value)}
               />
 
+              <Label htmlFor="totalStock" className="mt-3">
+                Feature Product
+              </Label>
+              <div className="flex items-center space-x-2">
+                <Switch
+                  id="airplane-mode"
+                  onCheckedChange={() => setIsFeatureProduct((prev) => !prev)}
+                  checked={isFeatureProduct ? true : false}
+                />
+                <Label htmlFor="airplane-mode">
+                  {isFeatureProduct ? "yes" : "no"}
+                </Label>
+              </div>
+
               <Button type="submit" disabled={isLoading}>
-                Add
+                {isProductId ? "Edit" : "Add"}
               </Button>
             </div>
           </form>

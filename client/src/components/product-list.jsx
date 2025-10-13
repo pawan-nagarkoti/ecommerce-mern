@@ -42,7 +42,14 @@ export default function ProductList({ item = {} }) {
         }}
       >
         <CardHeader className="p-0 gap-0">
-          <img src={item.image} alt="" className="w-full h-[200px]" />
+          <div className="relative">
+            <img src={item.image} alt="" className="w-full h-[200px]" />
+            {item?.featureProduct && (
+              <p className="absolute top-3.5 left-3.5 bg-black/70 text-white text-sm px-2 py-1 rounded">
+                Feature Product
+              </p>
+            )}
+          </div>
           <CardTitle></CardTitle>
           <CardDescription></CardDescription>
           <CardAction></CardAction>
