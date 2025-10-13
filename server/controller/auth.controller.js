@@ -288,19 +288,61 @@ const sendMailForOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { otp, email } = req.query;
-    const findUser = await User.find({ email });
 
-    if (findUser[0].expiresAt < new Date()) {
+    if (!otp && !email)
+      return res.status(400).json({
+        message: "otp and email is required",
+      });
+    const findUser = await User.find({ email });
+    const user = findUser[0];
+
+    if (user?.expiresAt < new Date()) {
       return res.status(400).json({ message: "OTP expired" });
     }
 
-    if (Number(otp) !== findUser[0].otp) {
+    if (Number(otp) !== user.otp) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
+    // create jwt token
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        userName: user.userName,
+        role: user.role,
+        email: user.email,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES_IN }
+    );
+
+    const refreshToken = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+      }
+    );
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      // sameSite: "None",
+      secure: false,
+      // maxAge: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
+    });
+
     return res.status(200).json({
       success: true,
-      message: "login successfully",
+      message: "Login successfully",
+      accessToken,
+      user: {
+        email: user.email,
+        role: user.role,
+        id: user._id,
+        userName: user.userName,
+      },
     });
   } catch (e) {
     console.log(e.message);

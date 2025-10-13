@@ -1,9 +1,14 @@
 import React, { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { _post, setAccessToken } from "../lib/api";
+import useCookie from "../hooks/useCookie";
 
 export default function EmailLogin() {
   const navigate = useNavigate();
   const [hasEmail, setHasEmail] = useState("");
+  const [sendMailLoader, setSendMailLoader] = useState(false);
+  const [verifyOtpLoader, setVerifyOtpLoader] = useState(false);
+  const { getCookie, addCookie } = useCookie();
 
   // UI-only OTP state for focus & display; not used for real validation.
   const otpLength = 6;
@@ -46,15 +51,48 @@ export default function EmailLogin() {
 
   const handleEmail = async (e) => {
     e.preventDefault();
+    setSendMailLoader(true);
     try {
-      console.log(hasEmail);
+      const res = await _post("auth/mail-for-otp", { email: hasEmail });
+      if (res.data.success) {
+        addCookie("otpEmail", hasEmail);
+        setHasEmail("");
+        alert("OTP sended in mail");
+      }
     } catch (e) {
       console.log(e.message);
+    } finally {
+      setSendMailLoader(false);
     }
   };
 
   const handleOtp = async (e) => {
     e.preventDefault();
+    setVerifyOtpLoader(true);
+    try {
+      let otpContainer = "";
+      otp.map((o) => (otpContainer += o));
+
+      const response = await _post(
+        `auth/verify-otp?otp=${Number(otpContainer)}&email=${getCookie(
+          "otpEmail"
+        )}`
+      );
+
+      if (response.data.success) {
+        setAccessToken(response.data.accessToken);
+        addCookie("accessToken", response.data.accessToken);
+        addCookie("loginUserInfo", response.data.user);
+
+        response.data.user.role === "admin"
+          ? navigate("/admin")
+          : navigate("/shop/home");
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setVerifyOtpLoader(false);
+    }
   };
 
   return (
@@ -88,47 +126,45 @@ export default function EmailLogin() {
               type="submit"
               className="w-full rounded-md bg-white px-4 py-2 font-medium text-black transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              send otp on mail
+              {sendMailLoader ? "Loading..." : "send otp in mail"}
             </button>
           </form>
           {/* OTP step */}
-          {hasEmail && (
-            <form className="space-y-5 mt-3" onSubmit={handleOtp}>
-              <div>
-                <label className="mb-2 block text-sm font-medium">
-                  One-time coded (OTP)
-                </label>
-                <div
-                  className="flex justify-between gap-2"
-                  onPaste={onPaste}
-                  aria-label="Enter the one-time passcode"
-                >
-                  {otp.map((d, i) => (
-                    <input
-                      key={i}
-                      ref={inputsRef[i]}
-                      inputMode="numeric"
-                      autoComplete={i === 0 ? "one-time-code" : "off"}
-                      pattern="[0-9]*"
-                      maxLength={1}
-                      value={d}
-                      onChange={(e) => setDigit(i, e.target.value)}
-                      onKeyDown={(e) => onKeyDown(e, i)}
-                      className="h-12 w-10 rounded-md border border-gray-600 bg-[#3b444b] text-center text-lg tracking-widest text-white focus:border-white focus:outline-none"
-                      aria-label={`Digit ${i + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full rounded-md bg-white px-4 py-2 font-medium text-black transition hover:bg-gray-200"
+          <form className="space-y-5 mt-3" onSubmit={handleOtp}>
+            <div>
+              <label className="mb-2 block text-sm font-medium">
+                One-time coded (OTP)
+              </label>
+              <div
+                className="flex justify-between gap-2"
+                onPaste={onPaste}
+                aria-label="Enter the one-time passcode"
               >
-                Login
-              </button>
-            </form>
-          )}
+                {otp.map((d, i) => (
+                  <input
+                    key={i}
+                    ref={inputsRef[i]}
+                    inputMode="numeric"
+                    autoComplete={i === 0 ? "one-time-code" : "off"}
+                    pattern="[0-9]*"
+                    maxLength={1}
+                    value={d}
+                    onChange={(e) => setDigit(i, e.target.value)}
+                    onKeyDown={(e) => onKeyDown(e, i)}
+                    className="h-12 w-10 rounded-md border border-gray-600 bg-[#3b444b] text-center text-lg tracking-widest text-white focus:border-white focus:outline-none"
+                    aria-label={`Digit ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full rounded-md bg-white px-4 py-2 font-medium text-black transition hover:bg-gray-200"
+            >
+              {verifyOtpLoader ? "Loading..." : "Login"}
+            </button>
+          </form>
 
           {/* Footer links */}
           <div

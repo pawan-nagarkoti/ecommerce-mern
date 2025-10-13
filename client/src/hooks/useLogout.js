@@ -12,6 +12,7 @@ export default function useLogout() {
       if (logoutUser?.data?.success) {
         deleteCookie("accessToken");
         deleteCookie("loginUserInfo");
+        deleteCookie("otpEmail");
         navigate("/login");
       }
     } catch (e) {
