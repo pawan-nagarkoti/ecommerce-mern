@@ -1,5 +1,4 @@
 function otpHtmlTemplate({ otp = "", expiresInMinutes = "", appName = "" }) {
-  console.log("dfdd", otp, expiresInMinutes, appName);
   return `
 <!doctype html>
 <html lang="en">

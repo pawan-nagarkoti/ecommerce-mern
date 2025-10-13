@@ -240,7 +240,13 @@ const restPassword = async (req, res) => {
 
 const sendMailForOtp = async (req, res) => {
   const otp = generateOtp(6);
+
+  // Expire time (10 minutes)
+  const expiresInMinutes = 10;
+  const expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000); // timestamp 10 min later
+
   try {
+    const { email } = req.body;
     if (otp) {
       await transporter.sendMail({
         from: "pawan@gmail.com",
@@ -249,10 +255,23 @@ const sendMailForOtp = async (req, res) => {
         text: "Testing email text",
         html: otpHtmlTemplate({
           otp,
-          expiresInMinutes: 10,
+          expiresInMinutes,
           appName: "Ecommerce application",
         }),
       });
+
+      const findUserByMail = await User.find({ email });
+      await User.findByIdAndUpdate(
+        { _id: findUserByMail[0]._id },
+        {
+          otp,
+          expiresAt,
+        },
+        {
+          new: true,
+        }
+      );
+
       return res.status(200).json({
         message: "OTP sended in mail",
       });
