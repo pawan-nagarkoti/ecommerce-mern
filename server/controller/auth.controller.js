@@ -285,6 +285,31 @@ const sendMailForOtp = async (req, res) => {
   }
 };
 
+const verifyOtp = async (req, res) => {
+  try {
+    const { otp, email } = req.query;
+    const findUser = await User.find({ email });
+
+    if (findUser[0].expiresAt < new Date()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    if (Number(otp) !== findUser[0].otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "login successfully",
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      message: "something error",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -293,4 +318,5 @@ module.exports = {
   authMiddleware,
   restPassword,
   sendMailForOtp,
+  verifyOtp,
 };
