@@ -193,10 +193,52 @@ const authMiddleware = async (req, res, next) => {
 // Router level	router.use(authMiddleware)	Protects all routes in that router
 // App level	app.use(authMiddleware)	Protects the whole app (rarely used for all routes)
 
+const restPassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const loginUserId = req.user.id;
+
+    const existingPassword = await User.find({ _id: loginUserId });
+
+    // password match
+    const passwordCheck = await bcrypt.compare(
+      oldPassword,
+      existingPassword[0].password
+    );
+
+    if (!passwordCheck) {
+      return res.status(401).json({
+        success: false,
+        message: "Incorrect password! Please try again",
+      });
+    } else {
+      const hashPassword = await bcrypt.hash(newPassword, 12);
+      await User.findByIdAndUpdate(
+        loginUserId,
+        {
+          password: hashPassword,
+        },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "password is updated",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return req.res(500).json({
+      message: "something is wrong while creating reset password",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   refreshToken,
   logoutUser,
   authMiddleware,
+  restPassword,
 };
