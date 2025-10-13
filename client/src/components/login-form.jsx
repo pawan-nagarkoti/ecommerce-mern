@@ -195,6 +195,13 @@ export function LoginForm({ className, ...props }) {
                 </Button>
               </div> */}
 
+              <div
+                className="text-center text-sm cursor-pointer"
+                onClick={() => navigate("/login/mail-with-otp")}
+              >
+                Login with Email
+              </div>
+
               <div className="text-center text-sm">
                 {isToggle ? "I have an account" : `Don't have an account`}{" "}
                 &nbsp;

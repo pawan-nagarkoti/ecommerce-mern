@@ -16,6 +16,7 @@ import ProductDetail from "./page/shop/product-detail";
 import Unauthorized from "./page/unauthorized";
 import NotFound from "./page/notFound";
 import ProtectedRoute from "./components/protectedRoute";
+import EmailLogin from "./components/mailWithOtp";
 
 export default function App() {
   const { isDiloagModalOpen, isProductId } = useUI();
@@ -25,6 +26,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="login/mail-with-otp" element={<EmailLogin />} />
 
         <Route path="/shop" element={<ShopLayout />}>
           <Route
