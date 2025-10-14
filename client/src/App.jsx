@@ -18,6 +18,8 @@ import NotFound from "./page/notFound";
 import ProtectedRoute from "./components/protectedRoute";
 import EmailLogin from "./components/mailWithOtp";
 import Feature from "./page/admin/feature";
+import Coupons from "./page/admin/coupon";
+import AdminCoupons from "./page/admin/coupon";
 
 export default function App() {
   const { isDiloagModalOpen, isProductId } = useUI();
@@ -103,6 +105,14 @@ export default function App() {
             element={
               <ProtectedRoute roles={["admin"]}>
                 <OrderContainer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="coupon"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <AdminCoupons />
               </ProtectedRoute>
             }
           />

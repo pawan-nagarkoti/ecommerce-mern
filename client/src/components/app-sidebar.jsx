@@ -37,6 +37,10 @@ const data = {
           title: "Order",
           url: "/admin/order",
         },
+        {
+          title: "Coupon",
+          url: "/admin/coupon",
+        },
       ],
     },
   ],
