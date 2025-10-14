@@ -47,7 +47,40 @@ const getAllCoupon = async (req, res) => {
     });
   }
 };
-const deleteCoupon = async (req, res) => {};
+
+const deleteCoupon = async (req, res) => {
+  try {
+    const { couponId } = req.params;
+
+    if (!couponId) {
+      return res.status(400).json({
+        message: "coupon id is required",
+      });
+    }
+    const deletedCoupon = await Coupon.findByIdAndDelete({ _id: couponId });
+
+    if (deletedCoupon) {
+      return res.status(200).json({
+        success: true,
+        data: deletedCoupon,
+        message: "coupon deleted",
+      });
+    } else {
+      return res.status(400).json({
+        success: false,
+        data: deleteCoupon,
+        message: "coupon not found",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      success: false,
+      message: "something is wrong",
+    });
+  }
+};
+
 const deleteAllCoupon = async (req, res) => {};
 const updateCoupon = async (req, res) => {};
 const getSingleCoupon = async (req, res) => {};
