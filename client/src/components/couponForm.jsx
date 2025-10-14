@@ -41,10 +41,11 @@ export default function CouponForm() {
         <Label htmlFor="expireOn" className="mt-3 mb-3">
           Expire On
         </Label>
-        <Input id="expireOn" type="text" name="expireOn" />
+        <Input id="expireOn" type="date" name="expireOn" />
+
         <div className="flex items-center space-x-2 mt-3">
           <Switch id="airplane-mode" />
-          <Label htmlFor="airplane-mode">Airplane Mode</Label>
+          <Label htmlFor="airplane-mode">{true ? "Active" : "Disabled"}</Label>
         </div>
       </form>
     </>
