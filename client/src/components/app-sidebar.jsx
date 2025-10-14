@@ -26,6 +26,10 @@ const data = {
           url: "/admin",
         },
         {
+          title: "Feature",
+          url: "/admin/feature",
+        },
+        {
           title: "Product",
           url: "/admin/product",
         },

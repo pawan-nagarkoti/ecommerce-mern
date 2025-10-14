@@ -17,6 +17,7 @@ import Unauthorized from "./page/unauthorized";
 import NotFound from "./page/notFound";
 import ProtectedRoute from "./components/protectedRoute";
 import EmailLogin from "./components/mailWithOtp";
+import Feature from "./page/admin/feature";
 
 export default function App() {
   const { isDiloagModalOpen, isProductId } = useUI();
@@ -77,6 +78,15 @@ export default function App() {
             element={
               <ProtectedRoute roles={["admin"]}>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="feature"
+            element={
+              <ProtectedRoute roles={["admin"]}>
+                <Feature />
               </ProtectedRoute>
             }
           />
