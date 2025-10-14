@@ -29,6 +29,8 @@ const addressRoutes = require("./routes/address.route");
 const orderRoutes = require("./routes/order.route");
 const searchRoutes = require("./routes/search.route");
 const reviewRoutes = require("./routes/review.route");
+const couponRoutes = require("./routes/coupon.route");
+
 const { authMiddleware } = require("./controller/auth.controller");
 const { authorize } = require("./middlewares/auth.middleware");
 
@@ -40,6 +42,7 @@ app.use("/address", authMiddleware, authorize("admin", "user"), addressRoutes);
 app.use("/order", authMiddleware, orderRoutes);
 app.use("/search", authMiddleware, searchRoutes);
 app.use("/review", authMiddleware, authorize("user", "admin"), reviewRoutes);
+app.use("/coupon", authMiddleware, authorize("admin"), couponRoutes);
 
 connectToDB();
 
