@@ -30,7 +30,23 @@ const addCoupon = async (req, res) => {
   }
 };
 
-const getAllCoupon = async (req, res) => {};
+const getAllCoupon = async (req, res) => {
+  try {
+    const fetchCoupon = await Coupon.find();
+    if (fetchCoupon) {
+      return res.status(200).json({
+        success: true,
+        data: fetchCoupon,
+        message: "fetch all coupon",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      message: "something is wrong",
+    });
+  }
+};
 const deleteCoupon = async (req, res) => {};
 const deleteAllCoupon = async (req, res) => {};
 const updateCoupon = async (req, res) => {};
