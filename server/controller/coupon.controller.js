@@ -124,7 +124,50 @@ const getSingleCoupon = async (req, res) => {
   }
 };
 
-const updateCoupon = async (req, res) => {};
+const updateCoupon = async (req, res) => {
+  try {
+    const { couponId } = req.params;
+
+    const {
+      title,
+      code,
+      type,
+      value,
+      minimumOrder,
+      useLeft,
+      expireOn,
+      active,
+    } = req.body;
+
+    const updatedCoupon = await Coupon.findByIdAndUpdate(
+      couponId,
+      {
+        title,
+        code,
+        type,
+        value,
+        minimumOrder,
+        useLeft,
+        expireOn,
+        active,
+      },
+      { new: true }
+    );
+
+    if (updatedCoupon) {
+      return res.status(200).json({
+        success: true,
+        data: updatedCoupon,
+        message: "coupon updated",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      message: "something error",
+    });
+  }
+};
 
 module.exports = {
   addCoupon,
