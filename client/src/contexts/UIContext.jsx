@@ -16,6 +16,7 @@ export const UIProvider = ({ children }) => {
   const [isOpenCart, setIsOpenCart] = useState(false);
   const [isDiloagModalOpen, setIsDiloagModalOpen] = useState(false);
   const [isSelectedAddress, setIsSelectedAddress] = useState("");
+  const [isSheetOpen, setIsSheetOpen] = useState("");
 
   return (
     <UIContext.Provider
@@ -44,6 +45,8 @@ export const UIProvider = ({ children }) => {
         setIsDiloagModalOpen,
         isSelectedAddress,
         setIsSelectedAddress,
+        isSheetOpen,
+        setIsSheetOpen,
       }}
     >
       {children}
