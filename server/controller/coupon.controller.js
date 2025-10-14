@@ -81,7 +81,23 @@ const deleteCoupon = async (req, res) => {
   }
 };
 
-const deleteAllCoupon = async (req, res) => {};
+const deleteAllCoupon = async (req, res) => {
+  try {
+    const deletedAllCoupon = await Coupon.deleteMany({});
+    return res.status(200).json({
+      success: true,
+      data: deletedAllCoupon,
+      message: "deleted all coupon",
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      success: false,
+      message: "something is wrong",
+    });
+  }
+};
+
 const updateCoupon = async (req, res) => {};
 const getSingleCoupon = async (req, res) => {};
 
