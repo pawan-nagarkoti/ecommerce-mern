@@ -98,8 +98,33 @@ const deleteAllCoupon = async (req, res) => {
   }
 };
 
+const getSingleCoupon = async (req, res) => {
+  try {
+    const { couponId } = req.params;
+    if (!couponId) {
+      return res.status(400).json({
+        message: "coupon id is required",
+      });
+    }
+    const coupon = await Coupon.findById({ _id: couponId });
+
+    if (coupon) {
+      return res.status(200).json({
+        success: true,
+        data: coupon,
+        message: "fetch single coupon",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      success: false,
+      message: "something is wrong",
+    });
+  }
+};
+
 const updateCoupon = async (req, res) => {};
-const getSingleCoupon = async (req, res) => {};
 
 module.exports = {
   addCoupon,
