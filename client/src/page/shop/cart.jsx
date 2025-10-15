@@ -4,6 +4,7 @@ import useUI from "../../contexts/UIContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/loding";
 import useCookie from "../../hooks/useCookie";
+import { Button } from "@/components/ui/button";
 
 export default function Cart() {
   const [cartData, setCartData] = useState([]);
@@ -15,8 +16,10 @@ export default function Cart() {
   const [hasCartDataLoading, setHasCartDataLoading] = useState(false);
   const [hasQuantityUpdate, setHasQuantityUpdate] = useState(0);
   const [quantityUpateLoader, setQuntityUpdateLoader] = useState(false);
-  const { getCookie } = useCookie();
   const [isCoupons, setIsCoupons] = useState([]);
+  const [couponValue, setCouponValue] = useState("");
+
+  const { addCookie, getCookie, deleteCookie } = useCookie();
 
   const fetchCartData = async () => {
     setHasCartDataLoading(true);
@@ -94,7 +97,9 @@ export default function Cart() {
         orderStatus: "Pending",
         paymentMethod: "Credit Card",
         paymentStatus: "Paid",
-        totalAmount: item?.totalAmount,
+        totalAmount: getCookie("totalAmountAfterCoupon")
+          ? getCookie("totalAmountAfterCoupon")
+          : item?.totalAmount,
         orderDate: Date.now(),
         orderUpdateDate: Date.now(),
       };
@@ -102,6 +107,7 @@ export default function Cart() {
       const res = await _post("order/add", cartData);
       if (res.status === 200) {
         navigate("/shop/account");
+        deleteCookie("totalAmountAfterCoupon");
       }
     } catch (e) {
       console.log(e.message);
@@ -125,6 +131,21 @@ export default function Cart() {
     fetchCartData();
     fetchCouponItems();
   }, []);
+
+  const handleCouponApply = async () => {
+    try {
+      const res = await _post("coupon/apply-coupon", {
+        code: couponValue,
+      });
+
+      if (res.data.success) {
+        addCookie("totalAmountAfterCoupon", res.data.totalAfterDiscount);
+      }
+    } catch (e) {
+      console.log(e.message);
+      alert(e.response.message);
+    }
+  };
   return (
     <>
       {hasCartDataLoading ? (
@@ -224,11 +245,13 @@ export default function Cart() {
                 <input
                   type="text"
                   placeholder="Enter coupon code"
-                  className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  value={couponValue || ""}
+                  className="flex-1 border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  onChange={(e) => setCouponValue(e.target.value)}
                 />
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
-                  Apply
-                </button>
+                <Button className="mt-1" onClick={handleCouponApply}>
+                  apply
+                </Button>
               </div>
 
               <div className="mt-6 border border-gray-200 rounded-md p-4">
@@ -245,7 +268,10 @@ export default function Cart() {
                         className="flex items-center justify-between border p-3 rounded hover:bg-gray-50 transition cursor-pointer"
                       >
                         <div>
-                          <p className="font-medium">{v.title}</p>
+                          <p className="font-medium text-[14px]">
+                            {v.title} {v.value}{" "}
+                            {v.type === "Percent" ? "%" : ""}
+                          </p>
                           <p className="text-xs text-gray-500">
                             Use code{" "}
                             <span className="font-semibold">{v.code}</span> on
@@ -260,12 +286,25 @@ export default function Cart() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between border-t pt-4">
+              <div
+                className={`flex items-center justify-between border-t pt-4 ${
+                  getCookie("totalAmountAfterCoupon") ? "line-through" : ""
+                }`}
+              >
                 <span className="font-semibold">Total</span>
                 <span className="font-semibold">
                   ₹{Math.floor(cartData?.data?.totalAmount ?? 0)}
                 </span>
               </div>
+
+              {getCookie("totalAmountAfterCoupon") && (
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold">After Coupon Applied</span>
+                  <span className="font-semibold">
+                    ₹{getCookie("totalAmountAfterCoupon")}
+                  </span>
+                </div>
+              )}
 
               <button
                 className="w-full rounded-md bg-black px-4 py-3 text-white font-medium hover:opacity-90"

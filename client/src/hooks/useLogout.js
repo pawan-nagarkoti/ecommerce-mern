@@ -13,6 +13,7 @@ export default function useLogout() {
         deleteCookie("accessToken");
         deleteCookie("loginUserInfo");
         deleteCookie("otpEmail");
+        deleteCookie("totalAmountAfterCoupon");
         navigate("/login");
       }
     } catch (e) {

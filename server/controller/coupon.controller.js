@@ -197,7 +197,7 @@ const applyCoupon = async (req, res) => {
 
     const cartTotal = Math.floor(totalAmount);
 
-    if (cartAmount < validCoupon[0].minimumOrder) {
+    if (cartTotal < validCoupon[0].minimumOrder) {
       return res.status(400).json({
         success: false,
         message: "Total cart ammount is less",
