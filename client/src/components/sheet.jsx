@@ -27,8 +27,9 @@ export function SheetDemo() {
           <SheetTitle>Your Cart</SheetTitle>
           <SheetDescription></SheetDescription>
         </SheetHeader>
-
-        <Cart />
+        <div className="overflow-auto">
+          <Cart />
+        </div>
 
         <SheetFooter>
           {/* <Button type="submit">Save changes</Button> */}

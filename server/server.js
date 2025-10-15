@@ -42,7 +42,7 @@ app.use("/address", authMiddleware, authorize("admin", "user"), addressRoutes);
 app.use("/order", authMiddleware, orderRoutes);
 app.use("/search", authMiddleware, searchRoutes);
 app.use("/review", authMiddleware, authorize("user", "admin"), reviewRoutes);
-app.use("/coupon", authMiddleware, authorize("admin"), couponRoutes);
+app.use("/coupon", authMiddleware, couponRoutes);
 
 connectToDB();
 

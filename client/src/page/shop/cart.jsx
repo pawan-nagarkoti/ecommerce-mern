@@ -16,6 +16,7 @@ export default function Cart() {
   const [hasQuantityUpdate, setHasQuantityUpdate] = useState(0);
   const [quantityUpateLoader, setQuntityUpdateLoader] = useState(false);
   const { getCookie } = useCookie();
+  const [isCoupons, setIsCoupons] = useState([]);
 
   const fetchCartData = async () => {
     setHasCartDataLoading(true);
@@ -31,9 +32,6 @@ export default function Cart() {
       setHasCartDataLoading(false);
     }
   };
-  useEffect(() => {
-    fetchCartData();
-  }, []);
 
   const handleDeleteCartItem = async (id) => {
     try {
@@ -111,6 +109,22 @@ export default function Cart() {
       setIsLoading(false);
     }
   };
+
+  const fetchCouponItems = async () => {
+    try {
+      const res = await _get("coupon/all-coupon");
+      if (res.data.success) {
+        setIsCoupons(res);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartData();
+    fetchCouponItems();
+  }, []);
   return (
     <>
       {hasCartDataLoading ? (
@@ -205,6 +219,46 @@ export default function Cart() {
                   </div>
                 </div>
               ))}
+
+              <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  className="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                />
+                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+                  Apply
+                </button>
+              </div>
+
+              <div className="mt-6 border border-gray-200 rounded-md p-4">
+                <h3 className="text-lg font-semibold mb-3">
+                  Available Coupons
+                </h3>
+
+                {/* coupon items */}
+                <div className="flex flex-col gap-3">
+                  {isCoupons?.data?.data?.length > 0 ? (
+                    isCoupons?.data?.data?.map((v, index) => (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between border p-3 rounded hover:bg-gray-50 transition cursor-pointer"
+                      >
+                        <div>
+                          <p className="font-medium">{v.title}</p>
+                          <p className="text-xs text-gray-500">
+                            Use code{" "}
+                            <span className="font-semibold">{v.code}</span> on
+                            orders above {v.minimumOrder}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>no coupons found</p>
+                  )}
+                </div>
+              </div>
 
               <div className="flex items-center justify-between border-t pt-4">
                 <span className="font-semibold">Total</span>
