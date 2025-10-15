@@ -9,7 +9,7 @@ const addCoupon = async (req, res) => {
       type: c.type,
       value: c.value,
       minimumOrder: c.minimumOrder,
-      useleft: c.useleft,
+      useLeft: c.useLeft,
       expireOn: c.expireOn,
       active: c.active,
     };

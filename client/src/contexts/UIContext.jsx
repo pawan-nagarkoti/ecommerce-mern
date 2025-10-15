@@ -3,8 +3,8 @@ import { createContext, useContext, useState } from "react";
 export const UIContext = createContext();
 
 export const UIProvider = ({ children }) => {
-  const [categoryValue, setCategoryValue] = useState("pawan"); // get category dropdown value
-  const [brandValue, setBrandValue] = useState("ddd"); // get brand dropdown value
+  const [categoryValue, setCategoryValue] = useState(""); // get category dropdown value
+  const [brandValue, setBrandValue] = useState(""); // get brand dropdown value
   const [callProducts, setCallProducts] = useState(false); // fetch product api
   const [isOpen, setIsOpen] = useState(false); // open and close side bar when we add products
   const [hasEditPrductBtnClicked, setHasEditProductBtnClicked] =
@@ -17,7 +17,8 @@ export const UIProvider = ({ children }) => {
   const [isDiloagModalOpen, setIsDiloagModalOpen] = useState(false);
   const [isSelectedAddress, setIsSelectedAddress] = useState("");
   const [isSheetOpen, setIsSheetOpen] = useState("");
-
+  const [hasCouponEditId, setHasCouponEditId] = useState("");
+  const [hasClickedCouponBtn, setHasClickedCouponBtn] = useState(false);
   return (
     <UIContext.Provider
       value={{
@@ -47,6 +48,10 @@ export const UIProvider = ({ children }) => {
         setIsSelectedAddress,
         isSheetOpen,
         setIsSheetOpen,
+        hasCouponEditId,
+        setHasCouponEditId,
+        hasClickedCouponBtn,
+        setHasClickedCouponBtn,
       }}
     >
       {children}

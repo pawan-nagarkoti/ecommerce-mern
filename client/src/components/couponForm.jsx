@@ -1,10 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { _post } from "@/lib/api";
+import { _post, _get } from "@/lib/api";
 import useUI from "../contexts/UIContext";
+import { _put } from "../lib/api";
 
 export default function CouponForm() {
   const [title, setTitle] = useState("");
@@ -15,7 +16,12 @@ export default function CouponForm() {
   const [useLeft, setUseLeft] = useState("");
   const [expireOn, setExpireOn] = useState("");
   const [active, setActive] = useState(false);
-  const { setIsSheetOpen } = useUI();
+  const {
+    setIsSheetOpen,
+    hasCouponEditId,
+    setHasCouponEditId,
+    setHasClickedCouponBtn,
+  } = useUI();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -32,10 +38,11 @@ export default function CouponForm() {
     };
     setIsLoading(true);
     try {
-      const response = await _post(`coupon/add-coupon`, couponObj);
+      const response = hasCouponEditId
+        ? await _put(`coupon/update-coupon/${hasCouponEditId}`, couponObj)
+        : await _post(`coupon/add-coupon`, couponObj);
 
       if (response.data.success) {
-        setIsSheetOpen(false);
         setTitle("");
         setCode("");
         setType("");
@@ -44,6 +51,9 @@ export default function CouponForm() {
         setUseLeft("");
         setExpireOn("");
         setActive(false);
+        setHasClickedCouponBtn((v) => !v);
+        setHasCouponEditId(null);
+        setIsSheetOpen(false);
       }
     } catch (e) {
       console.log(e.messge);
@@ -51,6 +61,32 @@ export default function CouponForm() {
       setIsLoading(false);
     }
   };
+
+  const fetchSingleCoupon = async () => {
+    try {
+      const res = await _get(`coupon/single-coupon/${hasCouponEditId}`);
+      if (res.data.success) {
+        const c = res.data.data;
+        setTitle(c.title);
+        setCode(c.code);
+        setType(c.type);
+        setValue(c.value);
+        setMinimumOrder(c.minimumOrder);
+        setUseLeft(c.useLeft);
+        setExpireOn(c.expireOn);
+        setActive(c.active);
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  useEffect(() => {
+    if (hasCouponEditId) {
+      fetchSingleCoupon();
+    }
+  }, [hasCouponEditId]);
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -80,9 +116,10 @@ export default function CouponForm() {
         </Label>
         <select
           className="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          value={type}
           onChange={(e) => setType(e.target.value)}
         >
-          <option defaultValue="" disabled selected>
+          <option defaultValue="" disabled>
             Select type
           </option>
           <option value="Percent">Percent</option>
@@ -94,7 +131,7 @@ export default function CouponForm() {
         </Label>
         <Input
           id="value"
-          type="text"
+          type="number"
           name="value"
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -104,7 +141,7 @@ export default function CouponForm() {
         </Label>
         <Input
           id="minimumOrder"
-          type="text"
+          type="number"
           name="minimumOrder"
           value={minimumOrder}
           onChange={(e) => setMinimumOrder(e.target.value)}
@@ -114,7 +151,7 @@ export default function CouponForm() {
         </Label>
         <Input
           id="useLeft"
-          type="text"
+          type="number"
           name="useLeft"
           value={useLeft}
           onChange={(e) => setUseLeft(e.target.value)}
@@ -133,6 +170,7 @@ export default function CouponForm() {
         <div className="flex items-center space-x-2 mt-5 mb-6">
           <Switch
             id="airplane-mode"
+            checked={active}
             onCheckedChange={(e) => setActive((prev) => !prev)}
           />
           <Label htmlFor="airplane-mode">
@@ -141,7 +179,11 @@ export default function CouponForm() {
         </div>
 
         <Button type="submit w-full">
-          {isLoading ? "Loading..." : "Add coupon"}
+          {isLoading
+            ? "Loading..."
+            : hasCouponEditId
+            ? "update coupon"
+            : "add coupon"}
         </Button>
       </form>
     </>
