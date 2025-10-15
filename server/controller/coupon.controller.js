@@ -195,14 +195,34 @@ const applyCoupon = async (req, res) => {
       .map((v) => v.totalPrice)
       .reduce((a, v) => (a += v), 0);
 
-    const cartAmount = Math.floor(totalAmount);
+    const cartTotal = Math.floor(totalAmount);
 
     if (cartAmount < validCoupon[0].minimumOrder) {
       return res.status(400).json({
         success: false,
-        message: "cart item is less",
+        message: "Total cart ammount is less",
       });
     }
+
+    let discountAmount;
+    let totalAfterDiscount;
+
+    if (validCoupon[0].type === "Percent") {
+      // Calculate discount amount as a percentage of cart total
+      discountAmount = (cartTotal * validCoupon[0].value) / 100;
+    } else {
+      // Fixed amount discount
+      discountAmount = validCoupon[0].value;
+    }
+
+    // Calculate final total after discount
+    totalAfterDiscount = Math.floor(cartTotal - discountAmount);
+
+    return res.status(200).json({
+      success: true,
+      totalAfterDiscount,
+      message: "discount applied",
+    });
   } catch (e) {
     console.log(e.message);
     return res.status(500).json({
