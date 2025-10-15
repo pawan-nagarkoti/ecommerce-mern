@@ -25,9 +25,9 @@ export function SheetContainer({ children }) {
         </SheetHeader>
         <div className="overflow-auto p-5 pt-0">{children}</div>
         <SheetFooter>
-          <Button type="submit">Save changes</Button>
+          {/* <Button type="submit">Save changes</Button> */}
           <SheetClose asChild>
-            <Button variant="outline">Close</Button>
+            {/* <Button variant="outline">Close</Button> */}
           </SheetClose>
         </SheetFooter>
       </SheetContent>
