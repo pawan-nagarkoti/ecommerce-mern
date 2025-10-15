@@ -6,6 +6,7 @@ const {
   deleteAllCoupon,
   updateCoupon,
   getSingleCoupon,
+  applyCoupon,
 } = require("../controller/coupon.controller");
 const { authorize } = require("../middlewares/auth.middleware");
 
@@ -17,5 +18,6 @@ router.post("/add-coupon", authorize("admin"), addCoupon);
 router.put("/update-coupon/:couponId", authorize("admin"), updateCoupon);
 router.delete("/delete-coupon/:couponId", authorize("admin"), deleteCoupon);
 router.delete("/deleteAll-coupon", authorize("admin"), deleteAllCoupon);
+router.post("/apply-coupon", applyCoupon);
 
 module.exports = router;

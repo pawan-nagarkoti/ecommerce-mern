@@ -19,7 +19,7 @@ export default function ProductList({ item = {} }) {
   const handleAddToCart = async (price, productID) => {
     try {
       const response = await _post("cart/add", {
-        userID: getCookie("userLoginInfo").id,
+        userID: getCookie("loginUserInfo")?.id,
         productID: productID,
         price: price,
       });

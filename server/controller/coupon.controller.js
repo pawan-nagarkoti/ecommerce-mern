@@ -1,4 +1,5 @@
 const Coupon = require("../models/coupon");
+const Cart = require("../models/Cart");
 
 const addCoupon = async (req, res) => {
   try {
@@ -169,6 +170,48 @@ const updateCoupon = async (req, res) => {
   }
 };
 
+const applyCoupon = async (req, res) => {
+  try {
+    const { code } = req.body;
+    if (!code) {
+      return res.status(400).json({
+        success: false,
+        message: "coupon is required",
+      });
+    }
+
+    const validCoupon = await Coupon.find({ code });
+    if (!validCoupon) {
+      return res.status(400).json({
+        success: false,
+        message: "coupon is not valid",
+      });
+    }
+
+    const decode = req.user;
+    const cartData = await Cart.find({ uniqueID: decode.id });
+
+    const totalAmount = cartData
+      .map((v) => v.totalPrice)
+      .reduce((a, v) => (a += v), 0);
+
+    const cartAmount = Math.floor(totalAmount);
+
+    if (cartAmount < validCoupon[0].minimumOrder) {
+      return res.status(400).json({
+        success: false,
+        message: "cart item is less",
+      });
+    }
+  } catch (e) {
+    console.log(e.message);
+    return res.status(500).json({
+      success: false,
+      message: "something error",
+    });
+  }
+};
+
 module.exports = {
   addCoupon,
   getAllCoupon,
@@ -176,4 +219,5 @@ module.exports = {
   deleteAllCoupon,
   updateCoupon,
   getSingleCoupon,
+  applyCoupon,
 };
