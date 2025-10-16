@@ -1,4 +1,10 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import Dashboard from "./page/admin/dashboard";
 import OrderContainer from "./page/admin/orderContainer";
 import Product from "./page/admin/product";
@@ -20,9 +26,31 @@ import EmailLogin from "./components/mailWithOtp";
 import Feature from "./page/admin/feature";
 import Coupons from "./page/admin/coupon";
 import AdminCoupons from "./page/admin/coupon";
+import { useEffect } from "react";
+import useCookie from "./hooks/useCookie";
 
 export default function App() {
   const { isDiloagModalOpen, isProductId } = useUI();
+  const location = useLocation("");
+  const navigate = useNavigate();
+  const { getCookie } = useCookie();
+
+  useEffect(() => {
+    const loginUserInfo = getCookie("loginUserInfo");
+
+    if (location.pathname === "/") {
+      if (loginUserInfo) {
+        const { role } = loginUserInfo;
+        if (role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/shop/home");
+        }
+      } else {
+        navigate("/login");
+      }
+    }
+  }, [location.pathname, navigate]);
 
   return (
     <>
