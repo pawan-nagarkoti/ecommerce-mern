@@ -1,9 +1,6 @@
 import axios from "axios";
 import { apiUrl } from "./constant";
-
-let accessToken = null;
-export const setAccessToken = (t) => (accessToken = t);
-export const clearAccessToken = () => (accessToken = null);
+import { getCookie, addCookie, deleteCookie } from "../hooks/useCookie";
 
 // Create an Axios instance
 const apiClient = axios.create({
@@ -14,8 +11,9 @@ const apiClient = axios.create({
 
 // Attach access token to requests
 apiClient.interceptors.request.use((config) => {
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const token = getCookie("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
@@ -36,16 +34,25 @@ apiClient.interceptors.response.use(
       if (!refreshing) {
         refreshing = apiClient
           .post("/auth/refresh")
-          .then((res) => res.data.accessToken)
+          .then(async (res) => {
+            addCookie("accessToken", res.data.accessToken);
+            await res.data.accessToken;
+          })
+          .catch(async (e) => {
+            await _post("auth/logout");
+            deleteCookie("accessToken");
+            deleteCookie("loginUserInfo");
+            deleteCookie("otpEmail");
+            deleteCookie("totalAmountAfterCoupon");
+          })
           .finally(() => {
             refreshing = null;
           });
       }
 
-      const newAccess = await refreshing;
-      if (newAccess) {
-        setAccessToken(newAccess);
-        original.headers.Authorization = `Bearer ${newAccess}`;
+      const token = getCookie("accessToken");
+      if (token) {
+        original.headers.Authorization = `Bearer ${token}`;
         return apiClient(original); // retry original request
       }
     }

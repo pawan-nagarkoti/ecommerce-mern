@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { _post, setAccessToken } from "../lib/api";
+import { _post } from "../lib/api";
 import { loginImg } from "../assets";
 import useCookie from "../hooks/useCookie";
 
@@ -56,7 +56,6 @@ export function LoginForm({ className, ...props }) {
         password: loginPassword,
       });
       if (response.data.status) {
-        await setAccessToken(response.data.accessToken);
         addCookie("accessToken", response.data.accessToken);
         addCookie("loginUserInfo", response.data.user);
 

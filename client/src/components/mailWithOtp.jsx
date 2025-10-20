@@ -1,6 +1,6 @@
 import React, { useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { _post, setAccessToken } from "../lib/api";
+import { _post } from "../lib/api";
 import useCookie from "../hooks/useCookie";
 
 export default function EmailLogin() {
@@ -80,7 +80,6 @@ export default function EmailLogin() {
       );
 
       if (response.data.success) {
-        setAccessToken(response.data.accessToken);
         addCookie("accessToken", response.data.accessToken);
         addCookie("loginUserInfo", response.data.user);
 
