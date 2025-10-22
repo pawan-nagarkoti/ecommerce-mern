@@ -168,10 +168,9 @@ export default function Navbar() {
         <SheetDemo />
       </div>
 
-      {/* Right side: Logout (desktop) and Hamburger (mobile) */}
       <div className="flex items-center gap-4">
         {/* Logout button for desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="flex items-center gap-5 md:gap-8">
           <div
             onClick={() => setIsOpenCart(true)}
             className="relative cursor-pointer"
@@ -254,7 +253,7 @@ export default function Navbar() {
         </div>
 
         {/* Hamburger menu for mobile */}
-        <div className="md:hidden">
+        {/* <div className="md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -290,7 +289,7 @@ export default function Navbar() {
               </SheetFooter>
             </SheetContent>
           </Sheet>
-        </div>
+        </div> */}
       </div>
     </nav>
   );
