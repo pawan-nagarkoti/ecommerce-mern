@@ -74,7 +74,7 @@ export default function Home() {
           {isProductLoading ? (
             <LoadingSpinner />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {productData?.data?.length > 0 ? (
                 productData.data.map((v, i) => (
                   <ProductList item={v} key={v.id ?? i} />

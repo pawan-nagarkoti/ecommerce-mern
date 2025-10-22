@@ -53,7 +53,7 @@ export default function SearchProduct() {
         {isLoading ? (
           <LoadingSpinner />
         ) : productData?.data?.data.length > 0 && isProductSearch ? (
-          <div className="mt-5 grid grid-cols-4 gap-5">
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {productData?.data?.data?.map((v, index) => (
               <ProductList item={v} />
             ))}

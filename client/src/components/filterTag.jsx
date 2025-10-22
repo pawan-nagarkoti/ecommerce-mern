@@ -7,7 +7,7 @@ export default function FilterTag(props) {
   return (
     <>
       <h2 className="text-center text-2xl mb-5">{props?.title}</h2>
-      <div className="grid grid-cols-5 gap-8 justify-center">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 justify-center ">
         {props?.items?.map((v, i) => (
           <div
             className="cursor-pointer flex justify-center items-center flex-col gap-3 shadow-sm p-5 rounded"

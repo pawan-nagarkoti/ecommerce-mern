@@ -69,12 +69,12 @@ export default function Listing() {
     <>
       <div className="grid grid-cols-12 h-screen overflow-hidden">
         {/* Left Sidebar (sticky) */}
-        <div className="col-span-2 sticky top-20 h-screen overflow-y-auto border-r bg-white p-5">
+        <div className="col-span-2 sticky top-20 h-screen overflow-y-auto border-r bg-white p-5 hidden md:block">
           <LeftFilterSidebar />
         </div>
 
         {/* Main Content */}
-        <div className="col-span-10 flex flex-col h-screen overflow-hidden">
+        <div className="col-span-12 md:col-span-10 flex flex-col h-screen overflow-hidden">
           {/* Top Filter (sticky) */}
           <div className="sticky top-0 z-10 bg-white border-b p-5">
             <TopFilterSidebar
@@ -84,7 +84,7 @@ export default function Listing() {
           </div>
 
           <div className="overflow-y-auto flex-1 p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 my-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 my-5">
               {isLoading ? (
                 // Center the spinner and make it span the full grid width
                 <div className="col-span-full flex justify-center py-10">

@@ -52,7 +52,7 @@ export default function AddressCard({ howManyAddressShow }) {
       {isLoading ? (
         <LoadingSpinner />
       ) : hasAddress?.data?.data?.length > 0 ? (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {hasAddress?.data?.data
             ?.slice(0, howManyAddressShow)
             ?.map((v, index) => (
