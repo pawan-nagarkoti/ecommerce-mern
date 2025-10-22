@@ -58,7 +58,7 @@ export default function Product() {
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-3">
             {data.data?.length > 0 ? (
               <>
                 {data.data?.map((v, i) => (

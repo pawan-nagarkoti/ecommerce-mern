@@ -47,7 +47,7 @@ export default function OrderModal({ orderId = "" }) {
   }, [isOrderStatusValue]);
 
   return (
-    <>
+    <div className="overflow-auto h-[500px]">
       {isLoading ? (
         <Loader />
       ) : (
@@ -171,9 +171,7 @@ export default function OrderModal({ orderId = "" }) {
                 id="order-status"
                 name="orderStatus"
                 defaultValue=""
-                className="block w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 shadow-sm outline-none
-               focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500
-               dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-100"
+                className="block w-full appearance-none rounded-md border border-gray-300 bg-white px-3 py-2 pr-9 text-sm text-gray-900 shadow-sm outline-none"
                 onChange={(e) => setIsOrderStatusValue(e.target.value)}
               >
                 <option value="" disabled>
@@ -199,6 +197,6 @@ export default function OrderModal({ orderId = "" }) {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
