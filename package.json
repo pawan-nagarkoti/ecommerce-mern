@@ -2,9 +2,12 @@
   "name": "mern-dev-setup",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n api,web -c green,blue \"npm:dev:server\" \"npm:dev:client\"",
-    "dev:server": "npm --prefix server run dev",
-    "dev:client": "npm --prefix client run dev"
+    "start": "concurrently -n mongo,api,web -c yellow,green,blue \"npm:start:mongo\" \"npm:start:server\" \"npm:start:client\"",
+    "start:mongo": "brew services start mongodb-community@8.2 && echo '✅ MongoDB started (brew service)' && sleep 2",
+    "start:server": "npm --prefix server run dev",
+    "start:client": "npm --prefix client run dev",
+    "stop:mongo": "brew services stop mongodb-community@8.2",
+    "stop": "npm run stop:mongo"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

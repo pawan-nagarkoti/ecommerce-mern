@@ -1,3 +1,11 @@
+# Start the frontend (React), backend (Express), and local MongoDB service together
+
+npm start
+
+# Stop the MongoDB service
+
+npm stop
+
 # In Terminal how to start mongodb Local -
 
 # Run mongodb
