@@ -34,6 +34,40 @@ const dashboardRoutes = require("./routes/dashboard.route");
 
 const { authMiddleware } = require("./controller/auth.controller");
 const { authorize } = require("./middlewares/auth.middleware");
+const mongoose = require("mongoose");
+let isConnected = false;
+
+async function connectToMongoDb() {
+  if (isConnected) return;
+
+  try {
+    console.log("Attempting MongoDB connection...");
+    await mongoose.connect(process.env.MONGODB_URL, {
+      serverSelectionTimeoutMS: 5000, // Fast fail
+      maxPoolSize: 10, // Connection pool
+    });
+    isConnected = true;
+    mongoose.connection.on("error", (err) => {
+      console.error("MongoDB error:", err);
+      isConnected = false;
+    });
+    console.log("MongoDB connected successfully!");
+  } catch (e) {
+    console.error("MongoDB connection failed:", e.message);
+    isConnected = false;
+  }
+}
+
+// Connect ONCE at startup (best practice)
+connectToMongoDb();
+
+// Simple middleware check (non-blocking)
+app.use((req, res, next) => {
+  if (!isConnected) {
+    console.log("DB not ready, but proceeding...");
+  }
+  next();
+});
 
 app.use("/auth", authRoutes);
 app.use("/feature", authMiddleware, featureRoutes);
@@ -48,30 +82,30 @@ app.use("/dashboard", authMiddleware, authorize("admin"), dashboardRoutes);
 
 // connectToDB();
 
-// app.listen(port, () => {
-//   console.log(`Server is now running on port ${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server is now running on port ${port}`);
+});
 
 // this code is used for versal deploylment
 // start ----
-let isConnected = false;
-async function connectToMongoDb() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URL);
-    isConnected = true;
-    console.log("MongoDB connected successfully!");
-  } catch (e) {
-    console.log(e.message);
-    console.log("something is wrong while connection mongoDB");
-  }
-}
+// let isConnected = false;
+// async function connectToMongoDb() {
+//   try {
+//     await mongoose.connect(process.env.MONGODB_URL);
+//     isConnected = true;
+//     console.log("MongoDB connected successfully!");
+//   } catch (e) {
+//     console.log(e.message);
+//     console.log("something is wrong while connection mongoDB");
+//   }
+// }
 
-app.use((req, res, next) => {
-  if (!isConnected) {
-    connectToMongoDb();
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   if (!isConnected) {
+//     connectToMongoDb();
+//   }
+//   next();
+// });
 
-module.exports = app;
+// module.exports = app;
 //---- end
