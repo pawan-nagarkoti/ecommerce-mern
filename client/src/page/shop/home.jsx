@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Slider } from "../../components/Slider";
+// import { Slider } from "../../components/Slider";
+import { Slider } from "../../components/slider";
 import FilterTag from "../../components/filterTag";
 import ProductList from "../../components/product-list";
 import { shopByBrand, shopByCategory } from "../../lib/constant";
