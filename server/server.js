@@ -46,10 +46,32 @@ app.use("/review", authMiddleware, authorize("user", "admin"), reviewRoutes);
 app.use("/coupon", authMiddleware, couponRoutes);
 app.use("/dashboard", authMiddleware, authorize("admin"), dashboardRoutes);
 
-connectToDB();
+// connectToDB();
 
 // app.listen(port, () => {
 //   console.log(`Server is now running on port ${port}`);
 // });
 
+// this code is used for versal deploylment
+// start ----
+let isConnected = false;
+async function connectToMongoDb() {
+  try {
+    await mongoose.connect(process.env.MONGODB_URL);
+    isConnected = true;
+    console.log("MongoDB connected successfully!");
+  } catch (e) {
+    console.log(e.message);
+    console.log("something is wrong while connection mongoDB");
+  }
+}
+
+app.use((req, res, next) => {
+  if (!isConnected) {
+    connectToMongoDb();
+  }
+  next();
+});
+
 module.exports = app;
+//---- end
