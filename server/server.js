@@ -82,9 +82,9 @@ app.use("/dashboard", authMiddleware, authorize("admin"), dashboardRoutes);
 
 // connectToDB();
 
-app.listen(port, () => {
-  console.log(`Server is now running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is now running on port ${port}`);
+// });
 
 // this code is used for versal deploylment
 // start ----
@@ -107,5 +107,5 @@ app.listen(port, () => {
 //   next();
 // });
 
-// module.exports = app;
+module.exports = app;
 //---- end
