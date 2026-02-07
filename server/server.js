@@ -18,7 +18,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 const authRoutes = require("./routes/auth.route");
@@ -48,6 +48,8 @@ app.use("/dashboard", authMiddleware, authorize("admin"), dashboardRoutes);
 
 connectToDB();
 
-app.listen(port, () => {
-  console.log(`Server is now running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is now running on port ${port}`);
+// });
+
+module.exports = app;
